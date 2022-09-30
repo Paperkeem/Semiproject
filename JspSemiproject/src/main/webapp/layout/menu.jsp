@@ -174,7 +174,7 @@ String root=request.getContextPath();
             </li>
             
             <li>
-              <a href = "#"><h5>admin</h5></a>
+              <a href = "index.jsp?main=admin/shoplist.jsp"><h5>admin</h5></a>
             </li>
           </ul>
         </div>

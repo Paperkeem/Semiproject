@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shop/star.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -19,10 +20,8 @@ color: black;
 }
 /* 헤더 페이지 네이션 스타일 */
 .location .intag{
-
 float:left;
 color:gray;
-
 }
 div.intag *{
 color:gray;
@@ -33,7 +32,6 @@ padding-bottom: 10px;
 }
 
 #menu1,#menu2{
-
 width:60px;
 background :none;
 border: 0;
@@ -69,7 +67,6 @@ cursor: pointer;
 .btn-like, .btn-order, .btn-cart{
 height: 60px;
 }
-
 </style>
 </head>
 <%
@@ -81,13 +78,59 @@ shopDto dto = dao.getData(shopnum);
 int price = Integer.parseInt(dto.getPrice());
 DecimalFormat df = new DecimalFormat("###,###");
 
+// 리뷰 5개씩 불러올 변수
+// 페이징에 필요한 변수
+int totalCount;
+int totalPage; // 총 페이지수
+int startPage; // 각 블럭의 시작페이지
+int endPage; // 각 블럭의 끝페이지
+int start; // 각 페이지의 시작번호
+int perPage=5; // 한 페이지당 보여질 글의 개수
+int perBlock=5; // 한 블럭당 보여지는 페이지 개수
+int currentPage; // 현재 페이지
+int no;
+
+// 총 개수 : 
+	totalCount=dao.getTotalCount();
+
+// 현재 페이지 번호 읽기(null일 경우는 1 페이지로 설정)
+if(request.getParameter("currentPage")==null){
+	currentPage=1;
+}else{
+	currentPage=Integer.parseInt(request.getParameter("currentPage"));
+}
+
+// 총 페이지 갯수 구하기
+totalPage=totalCount/perPage+(totalCount%perPage==0?0:1);
+
+// 각 블럭의 시작 페이지(현재페이지 3이면 시작 : 1 끝 : 5)
+// 각 블럭의 시작 페이지(현재페이지 6이면 시작 : 6 끝 : 10)
+startPage=(currentPage-1)/perBlock*perBlock+1;
+endPage=startPage+perBlock-1;
+
+// 총 페이지수가 8 .. 2번째 블럭은 startpage: 6 endpage: 10.. endpage 8로 수정
+if(endPage>totalPage){
+	endPage=totalPage;
+}
+
+// 각 페이지에서 불러올 시작 번호
+// 현재 페이지가 1일 경우 start 1, 현재 페이지 2일 경우 start 6
+start=(currentPage-1)*perPage;
+
+// 각 페이지에서 필요한 게시글 불러오기
+// List<SmartDto> list=dao.getList(start, perPage);
+
+// 각 글 앞에 붙일 시작 번호
+// 총 글이 만약에 20개면 1페이지는 20부터 2페이지는 15부터
+// 출력해서 1씩 감소하면서 출력
+no=totalCount-(currentPage-1)*perPage;
+
+
 %>
 <body>
-<hr style="width: 90%; margin: auto;">
-<br>
-<div class="container">
-	<!-- 페이지 탭 -->
-	<div class="location">
+
+<!-- 페이지 탭 -->
+	<div class="location" style="margin-left: 70px;">
 		<div class="inner">
 			<div class="intag">
 				<a href="index.jsp">홈</a> &nbsp;>&nbsp;
@@ -119,8 +162,11 @@ DecimalFormat df = new DecimalFormat("###,###");
 	  		</div>
 		</div> 
   	</div>
-  	
-  	<br>
+
+<br>
+
+
+<div class="container">
 
 	<!-- 상품 설명 섹션 -->
 	<div class="row">
@@ -179,13 +225,105 @@ DecimalFormat df = new DecimalFormat("###,###");
 				
 				<div>
 					<button type="button" class="btn btn-default btn-like" style="width: 10%;"><span class="glyphicon glyphicon-heart"></span></button>
-					<button type="button" class="btn btn-default btn-cart" style="width: 44%;">장바구니</button>
+					<button type="button" class="btn btn-default btn-cart" style="width: 44%; background-color: #283C82; color:white;">장바구니</button>
 					<button type="button" class="btn btn-default btn-order" style="width: 44%;">바로구매</button>
 				</div>
 		</form>	
 		</div>
 	</div>
+	
 </div>
+<!-- 상세 페이지 / 리뷰 섹션 --> 
+<br>
+<br>
+<br>
+
+<div class="container">
+
+  <ul class="nav nav-tabs nav-justified">
+    <li><a data-toggle="pill" href="#sangpum-page" style="color: gray;">상세 정보</a></li>
+    <li class="active"><a data-toggle="pill" href="#reply" style="color: gray;">리뷰</a></li>
+  </ul>
+  
+  <!-- 상세 페이지 -->
+  <div class="tab-content">
+    <div id="sangpum-page" class="tab-pane fade">
+      <br>
+      <br>
+      <br>
+      <img src="menu/images/sangppum-page.png" style="margin-left: 25%; width: 50%;">
+    </div>
+      
+    <!-- 리뷰 -->
+    <div id="reply" class="tab-pane fade in active">
+      <br>
+      <br>
+      <br>
+      <button type="button" id="write-reply" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-pencil"></span> 리뷰 등록</button>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><span class="glyphicon glyphicon-pencil"></span> 제품 리뷰 등록하기</h4>
+        </div>
+        
+        <div class="modal-body">
+	        <form id="reply-frm">
+	        	<input type="hidden" name="shopnum" value=<%=shopnum %>>
+				<input type="hidden" name="num" value=<%=num %>>
+				
+	       		<label >평점 :</label>
+	       		<div class="star-rating space-x-4 mx-auto">
+					<input type="radio" id="5-stars" name="rating" value="5" v-model="ratings" checked="checked"/>
+					<label for="5-stars" class="star pr-4">★</label>
+					<input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+					<label for="4-stars" class="star">★</label>
+					<input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+					<label for="3-stars" class="star">★</label>
+					<input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+					<label for="2-stars" class="star">★</label>
+					<input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+					<label for="1-star" class="star">★</label>
+				</div>
+	        	<br>
+	       		
+	       		<label >좋았던 점 :</label>
+	        	<select name="review" id="review" class="form-control" style="width: 100%;">
+	        		<option value="r1">전체적으로 만족스러운 제품이에요</option>
+	        		<option value="r2">촉촉한 보습력에 반했어요</option>
+	        		<option value="r3">흡수가 잘되고 사용감이 뛰어나요</option>
+	        		<option value="r4">발림성이 좋아요</option>
+	        		<option value="r5">효능 효과를 느낄 수 있어요</option>
+	        	</select>
+	        	<br>
+	        	
+	        	 <div class="form-group">
+				    <label for="comment">Comment:</label>
+			 	    <textarea class="form-control" rows="5" name="content" id="content" required"></textarea>
+			   	 </div>
+	        </form>  
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" id="reply-insert" data-dismiss="modal">리뷰 등록</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<!-- Modal end -->
+
+
+
 <script type="text/javascript">
 
 var cnt = parseInt($("#cnt").val());
@@ -237,6 +375,39 @@ $(".btn-cart").click(function(){
 		}
 	}); 
 });
+
+// 리뷰 모달창 열기
+$("#write-reply").click(function(){
+    $("#myModal").modal();
+    
+  });
+  
+// 리뷰 등록 버튼 ajax
+$("#reply-insert").click(function(){
+	 var data = $("#reply-frm").serialize();
+	 
+	 $.ajax({
+			type:"post",
+			url:"shop/replyinsert.jsp",
+			dataType:"html",
+			data:data,
+			success:function(){
+				alert("리뷰를 성공적으로 등록하였습니다.");
+			}
+		});	
+});
+
+replylist();
+
+// 리뷰 리스트 5개씩 불러오기
+function replylist(){
+	var loginid=$("#myid").val();
+	var shopnum=$("#shopnum").val();
+	var start=<%=start%>
+	var perpage=<%=perPage%>
+	// console.log(start,perpage)
+	
+}
 
 </script>
 </body>

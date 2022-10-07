@@ -48,7 +48,7 @@ width: 80%;
 
 }
 .listheader{
-background-image: url('shopsave/8.jpeg');
+background-image: url('shopsave/f3.jpeg');
 	opacity:0.9; 
 		width:100%;
 		height:180px; 
@@ -104,6 +104,7 @@ $(function(){
 	  
 	  $(".addmenu").fadeOut();
 		 $(".productlist").hover(function(){
+			 
 			 $(this).children(".addmenu").fadeIn(500)},
 			 function(){
 				 $(this).children(".addmenu").fadeOut(500); 
@@ -182,7 +183,7 @@ if(endPage>totalPage)
 		<div class="intag">
 			<a href="index.jsp">홈</a> &nbsp;>&nbsp;
 			</div>
-		
+
 			<div class="dropdown intag">
     	<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">카테고리
     	<span class="caret"></span></button>&nbsp;>&nbsp;
@@ -240,7 +241,7 @@ if(endPage>totalPage)
 	<div id="content">
     	<div class="listheader">
 		<div class="headertext">
-			<h2 style="color:black;">스킨케어&클렌징</h2>
+			<h2 style="color:black;">페이스메이크업</h2>
 		</div>
 	 	</div>
 	 	<div class="prd">

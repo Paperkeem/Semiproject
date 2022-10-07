@@ -1,3 +1,4 @@
+<%@page import="java.text.NumberFormat"%>
 <%@page import="data.Dto.shopDto"%>
 <%@page import="java.util.List"%>
 <%@page import="data.Dao.shopDao"%>
@@ -14,6 +15,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style type="text/css">
+
 #container{
 width:100%;
 margin-left: 70px;
@@ -47,31 +49,30 @@ width: 80%;
 }
 div.listheader{
 background-image: url('shopsave/5.jpeg');
-		opacity:0.8; 
+		opacity:0.9; 
 		width:100%;
-		height:200px; 
+		height:150px; 
 		background-position:center center; 
 		background-size: cover; text-align: center;
 		padding-top: 65px;
-
 }
 
-table.pdtab{
-width:1000px; 
-text-align: center;
-margin-left:100px;
+.addmenu
+{
+position:absolute;
+font-size: 16px;
+}
+.fim{
+    object-fit: cover;
+    border-radius: 5px;
+   	padding: 0 atuo;
+}
 
+.prd{
+margin-left:12%;
+margin-top: 30px;
 }
-div.container{
-width: 900px;
-margin-left: 0;
-}
-img.photo{
-width:90px;
-height: 100px;
-border:1px solid lightgray;
-border-radius: 10px;
-}
+
 </style>
 <script type="text/javascript">
 $(function(){
@@ -83,14 +84,45 @@ $(function(){
 		location.href="index.jsp?main=shop/detailview.jsp?shopnum="+shopnum;
 	 });
 	 
+	 $(".addmenu").fadeOut();
+	 $(".productlist").hover(function(){
+		 
+		 $(this).children(".addmenu").fadeIn(500)},
+		 function(){
+			 $(this).children(".addmenu").fadeOut(500); 
+	 })
 
+	 
+	 //좋아요 처리 
+	$("span.likes").click(function(){
+		var shopnum = $(this).attr("shopnum");
+		var tag = $(this);
+		//console.log(shopnum); 
+		$.ajax({
+			type:"get",
+			dataType:"json",
+			url:"shop/likechu.jsp",
+			data:{"shopnum":shopnum},
+			success:function(res){
+				tag.animate({'font-size':'21px'},100,function(){
+					$(this).css("font-size","16px");
+					tag.next().text(res.likechu);
+				});
+				
+				
+			}
+		});
+	})	
+	
 })
+
 </script>
 </head>
 <%
 
 shopDao dao = new shopDao();
 String gomin = request.getParameter("gomin");
+
 //페이징 
 //페이징에 필요한 변수
 int totalCount;
@@ -141,11 +173,11 @@ if(endPage>totalPage)
     	<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">카테고리
     	<span class="caret"></span></button>&nbsp;>
    		 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" >
-      		<li role="presentation"><a role="menuitem" tabindex="-1" href="index.jsp?main=shop/shoplist.jsp">스킨케어&클렌징</a></li>
+      		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">스킨케어&클렌징</a></li>
       		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">페이스메이크업</a></li>
       		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">바디&헤어케어</a></li>
       		<li role="presentation" class="divider"></li>
-      		<li role="presentation"><a role="menuitem" tabindex="-1" href="index.jsp?main=shop/listgomin.jsp">피부고민</a></li>
+      		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">피부고민</a></li>
     	</ul>
   		</div>
   		<div class="dropdown intag">
@@ -168,53 +200,85 @@ if(endPage>totalPage)
   <br>
 
 	<div id="content">
-
     	<div class="listheader">
 		<div class="headertext">
 			<h2 style="color:black;">피부고민</h2>
 		</div>
 		</div>
-	</div>
-	<br>
-	<table class="table table-bordered pdtab">
-	  <tr>	
+	<div class="prd">
 	  <%
-	 int i = 1;
-	 for(shopDto dto : list)
-	 {
-		if(dto.getGomin().equals(gomin)){
-		%>
 	
-		<td style="width:15%">
-		<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="photo img-thumbnail"><br>
-			<%=dto.getSangpum()%><br>
-			<h4 style="color:black;"><%=dto.getPrice()%></h4></a>
-		</td>
-		<%
-			if((i+4)%4==0)
-			{%>
-			</tr><tr>	
-			<%} i++;
-		} else{
+	 int i = 1;
+	 if( gomin != null ){
+		 
+		 for(shopDto dto : list)
+		 {
+			if(dto.getGomin().equals(gomin)){
 			%>
-			<td style="width:15%">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black" class="detail">
-				<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="photo img-thumbnail"><br>
-				<%=dto.getSangpum()%><br>
-				<h4 style="color:black;"><%=dto.getPrice()%></h4></a>
-			</td>
+			<div class="productlist" style="float: left; margin-right: 30px;">
+			<div class="pim">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black; border-radius: 5px;" class="detail">
+			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;"></a>
+			</div>
+			<div class="info">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
+				<div class="title" style="width:200px; font-size: 1.1em;">
+				<%=dto.getSangpum()%>
+				</div>
+				<h4><%=dto.getPrice()%>원</h4></a>
+			</div>
+			<div class="addmenu">
+				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
+				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
+				shopnum="<%=dto.getShopnum()%>"></span>
+				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
+				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;"></span>
+			</div>
+			</div>
 			<%
 				if((i+4)%4==0)
 				{%>
-				</tr><tr>	
+				<br>
 				<%} i++;
-		}
-	 }%>	
-	 </tr>
-	</table>
-
-  <div style="width: 100px; margin-left:40%;" class="contain">
+			}
+		 }
+		 
+	 }else{
+	 
+		 for(shopDto dto : list)
+			 {
+			if(dto.getGomin() != "9"){%>
+			<div class="productlist" style="float: left; margin-right: 30px;">
+			<div class="pim">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
+			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;"></a>
+			</div>
+			<div class="info">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
+				<div class="title" style="width:200px; font-size: 1.1em;">
+				<%=dto.getSangpum()%>
+				</div>
+				<h4><%=dto.getPrice()%>원</h4></a>
+			</div>
+			<div class="addmenu">
+				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
+				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
+				shopnum="<%=dto.getShopnum()%>"></span>
+				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
+				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;"></span>
+			</div>
+			</div>
+			<%
+				if((i+4)%4==0)
+				{%>
+				<br>
+				<%} i++;
+			}
+		 }
+	 }%>
+	</div>
+	</div>
+  <div style="width: 100px; margin-left: 34%;" class="pcontainer">
   <ul class="pagination">
       <%
     if(startPage>1)

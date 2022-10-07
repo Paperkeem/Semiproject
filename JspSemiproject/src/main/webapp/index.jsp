@@ -26,11 +26,11 @@ div.menu{
 div.main{
 	width: 100%;
 	top: 120px;
-	height: 700px;
+	height: 1080px;
 }
 div.footer{
 	width: 100%;
-	top: 820px;
+	top: 1300px;
 }
 
 </style>

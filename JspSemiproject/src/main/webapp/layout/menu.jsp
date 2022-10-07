@@ -73,8 +73,8 @@ String root=request.getContextPath();
               </div>
             </li>
 
-            <li>
-              <a href = "index.jsp?main=shop/shoplist.jsp" class = "menu-link">
+            <li category="skincare_cleansing" >
+              <a href = "index.jsp?main=shop/shoplist.jsp?category=skincare_cleansing" class = "menu-link">
                 <h5>스킨케어 & 클렌징 &nbsp;</h5>
                 <span class = "drop-icon">
                   <i class = "fas fa-chevron-down"></i>
@@ -84,10 +84,10 @@ String root=request.getContextPath();
                 <!-- item -->
                 <div class = "sub-menu-item">
                   <h4></h4>
-                  <ul>
-                    <li sangpumtype="toner_loction"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=toner_loction"><h5>토너/로션</h5></a></li>
-                    <li sangpumtype="cream_jell"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=cream_jell"><h5>크림/젤</h5></a></li>
-                    <li sangpumtype="essence_serum"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=essence_serum"><h5>에센스/세럼</h5></a></li>
+                  <ul>																								
+                    <li sangpumtype="toner_loction"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=toner_loction&category=skincare_cleansing"><h5>토너/로션</h5></a></li>
+                    <li sangpumtype="cream_jell"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=cream_jell&category=skincare_cleansing"><h5>크림/젤</h5></a></li>
+                    <li sangpumtype="essence_serum"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=essence_serum&category=skincare_cleansing"><h5>에센스/세럼</h5></a></li>
                     <h4></h4>
                   </ul>
                 </div>
@@ -96,8 +96,8 @@ String root=request.getContextPath();
                 <div class = "sub-menu-item">
                   <h4></h4>
                   <ul>
-                    <li sangpumtype="mask_pack"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=mask_pack"><h5>마스크/팩</h5></a></li>
-                    <li sangpumtype="cleansing"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=cleansing"><h5>클렌징</h5></a></li>
+                    <li sangpumtype="mask_pack" ><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=mask_pack&category=skincare_cleansing"><h5>마스크/팩</h5></a></li>
+                    <li sangpumtype="cleansing" ><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=cleansing&category=skincare_cleansing"><h5>클렌징</h5></a></li>
                     <h4></h4>
                   </ul>
                 </div>
@@ -105,10 +105,8 @@ String root=request.getContextPath();
               </div>
             </li>
 
-            
-
-            <li>
-              <a href = "#" class = "menu-link">
+            <li category="facemakeup" >
+              <a href = "index.jsp?main=shop/facelist.jsp?category=facemakeup" class = "menu-link">
                 <h5>페이스 메이크업 &nbsp;</h5>
                 <span class = "drop-icon">
                   <i class = "fas fa-chevron-down"></i>
@@ -119,9 +117,9 @@ String root=request.getContextPath();
                 <div class = "sub-menu-item">
                   <h4></h4>
                   <ul>
-                    <li sangpumtype="base_foundation"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=base_foundation"><h5>베이스/파운데이션</h5></a></li>
-                    <li sangpumtype="blush_highlighter"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=blush_highlighter"><h5>블러셔/하이라이터</h5></a></li>
-                    <li sangpumtype="eyeshadow"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=eyeshadow"><h5>아이섀도우</h5></a></li>
+                    <li sangpumtype="base_foundation"><a href = "index.jsp?main=shop/facelist.jsp?sangpumtype=base_foundation&category=facemakeup"><h5>베이스/파운데이션</h5></a></li>
+                    <li sangpumtype="blush_highlighter"><a href = "index.jsp?main=shop/facelist.jsp?sangpumtype=blush_highlighter&category=facemakeup"><h5>블러셔/하이라이터</h5></a></li>
+                    <li sangpumtype="eyeshadow" ><a href = "index.jsp?main=shop/facelist.jsp?sangpumtype=eyeshadow&category=facemakeup"><h5>아이섀도우</h5></a></li>
                     <h4></h4>
                   </ul>
                 </div>
@@ -130,9 +128,9 @@ String root=request.getContextPath();
                 <div class = "sub-menu-item">
                   <h4></h4>
                   <ul>
-                    <li sangpumtype="eyeliner_brow"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=eyeliner_brow"><h5>아이라이너/브로우</h5></a></li>
-                    <li sangpumtype="mascara"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=mascara"><h5>마스카라</h5></a></li>
-                    <li sangpumtype="lip"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=lip"><h5>립 메이크업</h5></a></li>
+                    <li sangpumtype="eyeliner_brow"><a href = "index.jsp?main=shop/facelist.jsp?sangpumtype=eyeliner_brow&category=facemakeup"><h5>아이라이너/브로우</h5></a></li>
+                    <li sangpumtype="mascara"><a href = "index.jsp?main=shop/facelist.jsp?sangpumtype=mascara&category=facemakeup"><h5>마스카라</h5></a></li>
+                    <li sangpumtype="lip"><a href = "index.jsp?main=shop/facelist.jsp?sangpumtype=lip&category=facemakeup"><h5>립 메이크업</h5></a></li>
                     <h4></h4>
                   </ul>
                 </div>
@@ -140,8 +138,8 @@ String root=request.getContextPath();
               </div>
             </li>
 			
-			<li>
-              <a href = "#" class = "menu-link">
+			<li category="body_haircare" >
+              <a href = "index.jsp?main=shop/bodyhairlist.jsp?category=body_haircare" class = "menu-link">
                 <h5>바디 & 헤어케어 &nbsp;</h5>
                 <span class = "drop-icon">
                   <i class = "fas fa-chevron-down"></i>
@@ -152,9 +150,9 @@ String root=request.getContextPath();
                 <div class = "sub-menu-item">
                   <h4></h4>
                   <ul>
-                    <li sangpumtype="body_care"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=body_care"><h5>바디케어</h5></a></li>
-                    <li sangpumtype="hairstyling"><a href ="index.jsp?main=shop/shoplist.jsp?sangpumtype=hairstyling"><h5>헤어스타일링</h5></a></li>
-                    <li sangpumtype="perfume"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=perfume"><h5>향수</h5></a></li>
+                    <li sangpumtype="body_care"><a href = "index.jsp?main=shop/bodyhairlist.jsp?sangpumtype=body_care&category=body_haircare"><h5>바디케어</h5></a></li>
+                    <li sangpumtype="hairstyling"><a href ="index.jsp?main=shop/bodyhairlist.jsp?sangpumtype=hairstyling&category=body_haircare"><h5>헤어스타일링</h5></a></li>
+                    <li sangpumtype="perfume"><a href = "index.jsp?main=shop/bodyhairlist.jsp?sangpumtype=perfume&category=body_haircare"><h5>향수</h5></a></li>
                     <h4></h4>
                   </ul>
                 </div>
@@ -163,7 +161,7 @@ String root=request.getContextPath();
                 <div class = "sub-menu-item">
                   <h4></h4>
                   <ul>
-                    <li sangpumtype="beauty_accessories"><a href = "index.jsp?main=shop/shoplist.jsp?sangpumtype=beauty_accessories"><h5>미용소품</h5></a></li>
+                    <li sangpumtype="beauty_accessories"><a href = "index.jsp?main=shop/bodyhairlist.jsp?sangpumtype=beauty_accessories&category=body_haircare"><h5>미용소품</h5></a></li>
 
                     <h4></h4>
                   </ul>

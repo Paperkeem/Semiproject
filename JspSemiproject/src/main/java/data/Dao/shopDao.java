@@ -179,5 +179,23 @@ public class shopDao {
 		
 	}
 	
+	public void updateLikechu(String shopnum) {
+		Connection conn = db.getConnection();
+		PreparedStatement pstmt = null;
+		
+		String sql="update shop set likechu=likechu+1 where shopnum=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			
+			pstmt.setString(1, shopnum);
+			pstmt.execute();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {db.dbClose(pstmt, conn);}
+		
+	}
 	
 }

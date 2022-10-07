@@ -17,8 +17,7 @@ String root=request.getContextPath();
 <link rel="stylesheet" href="<%=root %>/menu/menustyle.css">
 <!-- Font awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-<style type="text/css">
-</style>
+<script src="<%=root %>/menu/menuscript.js"></script>
 </head>
 <body>
 
@@ -185,7 +184,5 @@ String root=request.getContextPath();
 
 
 <!--jQuery-->
-<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-<script src="<%=root %>/menu/menuscript.js"></script>
 </body>
 </html>

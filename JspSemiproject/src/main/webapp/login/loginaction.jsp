@@ -18,10 +18,10 @@
 		
 		
 		response.sendRedirect("../index.jsp?main=login/loginmain.jsp");
-	}else
-%>
+	}else{%>
+	
 		<script type="text/javascript">
 			alert("아이디 또는 비번이 맞지않습니다");
 			history.back();
 		</script>
-}
+<%}%>

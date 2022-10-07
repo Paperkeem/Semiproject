@@ -21,10 +21,10 @@
 }
  
 .star-rating :checked ~ label {
-  -webkit-text-fill-color: gold;
+  -webkit-text-fill-color: #283C82;
 }
  
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-  -webkit-text-fill-color: #fff58c;
+  -webkit-text-fill-color: lightblue;
 }

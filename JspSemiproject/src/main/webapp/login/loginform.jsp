@@ -69,11 +69,11 @@ if(saveok!=null){
 	<form action="login/loginaction.jsp" method="post" class="form-inline">
 	
 	<div class="text">
-	<input name="loginid" type="text" class="id" placeholder="아이디">
+	<input name="id" type="text" class="id" placeholder="아이디">
 	</div>
 	
 	<div class="text">
-	<input name="loginpw" type="password" class="pass" placeholder="비밀번호">
+	<input name="pass" type="password" class="pass" placeholder="비밀번호">
 	</div>
 	
 	<tr>
@@ -84,7 +84,7 @@ if(saveok!=null){
 	</td>
 	</tr>
 	
-	<br><br><button class="btn">로그인</button>
+	<br><br><button type="submit" class="btn">로그인</button>
 	<p class="text">회원이 아니신가요? &nbsp;&nbsp;&nbsp; <a href="index.jsp?main=member/memberform.jsp">회원가입</a></p>
 	</form>
 

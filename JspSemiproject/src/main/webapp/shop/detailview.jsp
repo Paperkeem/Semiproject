@@ -314,7 +314,7 @@ no=totalCount-(currentPage-1)*perPage;
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" id="reply-insert" data-dismiss="modal">리뷰 등록</button>
+          <button type="button" class="btn btn-default" id="reply-insert" data-dismiss="modal" style="background-color: #283C82; color: white;">리뷰 등록</button>
         </div>
       </div>
       

@@ -170,7 +170,7 @@ String root=request.getContextPath();
             </li>
 			
             <li>
-              <a href = "#"><h5>Q&A</h5></a>
+              <a href = "index.jsp?main=qna/qnalist.jsp"><h5>Q&A</h5></a>
             </li>
             
             <li>

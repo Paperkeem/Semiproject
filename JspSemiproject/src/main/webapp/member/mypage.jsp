@@ -10,3 +10,7 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
+	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:200px; border: 1px solid">
+	<br><br><br><h2>마이페이지</h2></div>
+</body>
+</html>

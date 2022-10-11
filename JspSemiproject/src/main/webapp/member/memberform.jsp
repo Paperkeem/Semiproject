@@ -20,7 +20,7 @@
   border-radius: 15px;
   font-size: 12pt;
   }
-  .btn2 {
+  .btn {
   cursor: pointer;
   display: inline-block;
   width: 150px;
@@ -32,6 +32,7 @@
   border: none;
   border-radius: 5px;
 }
+
 </style>
 
 <script type="text/javascript">
@@ -63,7 +64,6 @@ $(function(){
 		});
 	});
 	
-	//피부타입선택
 
 });
 
@@ -77,14 +77,40 @@ $(function(){
 			return false; //action이 호출되지 않는다
 		}
 	}
+	
+	//핸드폰번호(-)
+	 function addHypen(obj) {
+	    var number = obj.value.replace(/[^0-9]/g, "");
+	    var phone = "";
 
+	    if(number.length < 4) {
+	        return number;
+	    } else if(number.length < 7) {
+	        phone += number.substr(0, 3);
+	        phone += "-";
+	        phone += number.substr(3);
+	    } else if(number.length < 11) {
+	        phone += number.substr(0, 3);
+	        phone += "-";
+	        phone += number.substr(3, 3);
+	        phone += "-";
+	        phone += number.substr(6);
+	    } else {
+	        phone += number.substr(0, 3);
+	        phone += "-";
+	        phone += number.substr(3, 4);
+	        phone += "-";
+	        phone += number.substr(7);
+	    }
+	    obj.value = phone;
+	}
 </script>
 </head>
 <body>
-	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:80px; border: 1px solid">
-	<h2>회원가입</h2></div>
-	<form action="member/memberadd.jsp" method="post" class="form-inline">
-	<table class="table table-bordered" style="width: 600px;">
+	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:200px; border: 1px solid">
+	<br><br><br><h2>회원가입</h2></div>
+	<form method="post" class="form-inline">
+	<table class="table table-bordered" style="width: 630px;">
    
    <tr>
    <th width="200" height="50">이름</th>
@@ -99,7 +125,7 @@ $(function(){
    <td>
    <input type="text" name="id" class="form-control" required="required"
    style="width: 150px;">
-   <button type="button"  class="btn" id="btncheck">중복체크</button>
+   <button type="button"  class="btn2" id="btncheck">중복체크</button>
    <span class="idsuccess" style="color: gray; margin-left: 10px;"></span>
    </td>
    </tr>
@@ -116,10 +142,10 @@ $(function(){
    </tr>
    
    <tr>
-   <th width="200">핸드폰 번호<br>('-' 없이 숫자만 입력)</th>
+   <th width="200">핸드폰 번호</th>
    <td>
-   <input type="text" name="hp" class="form-control"
-	required="required" placeholder="010-****-****"
+   <input type="text" onKeyup="addHypen(this);" name="hp" class="form-control"
+	required="required" placeholder="' - ' 없이 숫자만 입력"
    style="width: 250px;">
    </td>
    </tr>
@@ -137,22 +163,24 @@ $(function(){
  	<tr>
  	<th width="200">피부 고민</th>
  	<td text align="center">
-	<input type="checkbox" name="gomin" value="모공">모공&nbsp;
-	<input type="checkbox" name="gomin" value="피부결">피부결&nbsp;
-	<input type="checkbox" name="gomin" value="주름">주름&nbsp;
-	<input type="checkbox" name="gomin" value="탄력">탄력&nbsp;
-	<input type="checkbox" name="gomin" value="트러블">트러블&nbsp;<br>
-	<input type="checkbox" name="gomin" value="각질">각질&nbsp;
-	<input type="checkbox" name="gomin" value="민감성">민감성&nbsp;
-	<input type="checkbox" name="gomin" value="피지과다">피지과다&nbsp;
-	<input type="checkbox" name="gomin" value="기타">기타&nbsp;
+	<input type="radio" name="gomin" value="모공">모공&nbsp;
+	<input type="radio" name="gomin" value="피부결">피부결&nbsp;
+	<input type="radio" name="gomin" value="주름">주름&nbsp;
+	<input type="radio" name="gomin" value="탄력">탄력&nbsp;
+	<input type="radio" name="gomin" value="트러블">트러블&nbsp;<br>
+	<input type="radio" name="gomin" value="각질">각질&nbsp;
+	<input type="radio" name="gomin" value="민감성">민감성&nbsp;
+	<input type="radio" name="gomin" value="피지과다">피지과다&nbsp;
+	<input type="radio" name="gomin" value="기타">기타&nbsp;
 	</td>
  	</tr>
 	
 	<tr>
  	<td align="center" colspan="2">
- 	<button type="submit" class="btn2">회원가입 완료</button>
- 	<button type="reset" class="btn2">취소</button>
+	<button type="button" class="btn"
+	onclick="location.href='member/memberadd.jsp'">회원가입 완료</button>
+	<button type="button" class="btn"
+	onclick="location.href='index.jsp?main=login/loginform.jsp'">취소</button>
  	</td>
  	</tr>
   	</table>

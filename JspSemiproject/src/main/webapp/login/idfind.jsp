@@ -9,31 +9,24 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <style>
-* {
-  margin: 0px;
-  padding: 0px;
-  text-decoration: none;
-  font-family:Noto Sans KR;
-}
 .form-inline {
   position:absolute;
   width:400px;
-  height:400px;
+  height:0px;
   padding: 30px, 20px;
   background-color:#FFFFFF;
   text-align:center;
-  top:40%;
+  top:20%;
   left:50%;
   transform: translate(-50%,-50%);
   border-radius: 15px;
 }
-
 .text {
   border-bottom: 2px solid #adadad;
   margin: 30px;
   padding: 10px 10px;
 }
-.id, .pass {
+.name, .hp {
   width: 100%;
   border:none;
   outline:none;
@@ -54,42 +47,49 @@
   border-radius: 5px;
 }
 </style>
-</head>
-<%
-//세션값 얻기
-String saveok=(String)session.getAttribute("saveok");
-String myid="";
-if(saveok!=null){
-	myid=(String)session.getAttribute("myid");
+<script>
+//핸드폰번호(-)
+function addHypen(obj) {
+   var number = obj.value.replace(/[^0-9]/g, "");
+   var phone = "";
+
+   if(number.length < 4) {
+       return number;
+   } else if(number.length < 7) {
+       phone += number.substr(0, 3);
+       phone += "-";
+       phone += number.substr(3);
+   } else if(number.length < 11) {
+       phone += number.substr(0, 3);
+       phone += "-";
+       phone += number.substr(3, 3);
+       phone += "-";
+       phone += number.substr(6);
+   } else {
+       phone += number.substr(0, 3);
+       phone += "-";
+       phone += number.substr(3, 4);
+       phone += "-";
+       phone += number.substr(7);
+   }
+   obj.value = phone;
 }
-%>
+</script>
+</head>
 <body>
 	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:200px; border: 1px solid">
-	<br><br><br><h2>로그인</h2></div>
-	<form action="login/loginaction.jsp" method="post" class="form-inline">
+	<br><br><br><h2>아이디 찾기</h2>
+	<br>아이디는 가입시 입력하신 핸드폰 번호를 통해 찾으실 수 있습니다.</div>
+	<form action="index.jsp?main=login/idfind2.jsp" method="post" class="form-inline">
 	
 	<div class="text">
-	<input name="id" type="text" class="id" placeholder="아이디"
-	value="<%=myid %>">
+	<input name="name" type="text" class="name" placeholder="이름">
 	</div>
 	
 	<div class="text">
-	<input name="pass" type="password" class="pass" placeholder="비밀번호">
+	<input name="hp" onKeyup="addHypen(this);" type="text" class="hp" placeholder="핸드폰 번호 (' - ' 없이 숫자만 입력)">
 	</div>
 	
-	<tr>
-	<td colspan="2" align="center">
-	<input type="checkbox" name="cbsave"
-	<%=saveok==null?"":"checked" %>>아이디 저장 &nbsp;&nbsp;&nbsp;
-	<a href="index.jsp?main=login/idfind.jsp">아이디 찾기</a>
-	&nbsp;<a>/</a>&nbsp;
-	<a href="index.jsp?main=login/passfind.jsp">비밀번호 찾기</a>
-	</td>
-	</tr>
-	
-	<br><br><button type="submit" class="btn">로그인</button>
-	<p class="text">회원이 아니신가요? &nbsp;&nbsp;&nbsp; <a href="index.jsp?main=member/memberform.jsp">회원가입</a></p>
-	</form>
-
+	<br><button type="submit" class="btn">확인</button>
 </body>
 </html>

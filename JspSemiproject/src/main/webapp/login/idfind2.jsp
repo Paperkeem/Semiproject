@@ -1,3 +1,4 @@
+<%@page import="data.Dao.memberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -9,31 +10,24 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <style>
-* {
-  margin: 0px;
-  padding: 0px;
-  text-decoration: none;
-  font-family:Noto Sans KR;
-}
 .form-inline {
   position:absolute;
   width:400px;
-  height:400px;
+  height:0px;
   padding: 30px, 20px;
   background-color:#FFFFFF;
   text-align:center;
-  top:40%;
+  top:20%;
   left:50%;
   transform: translate(-50%,-50%);
   border-radius: 15px;
 }
-
 .text {
   border-bottom: 2px solid #adadad;
   margin: 30px;
   padding: 10px 10px;
 }
-.id, .pass {
+.name, .hp {
   width: 100%;
   border:none;
   outline:none;
@@ -45,7 +39,7 @@
 .btn {
   cursor: pointer;
   display: inline-block;
-  width: 330px;
+  width: 200px;
   background: lightgray;
   padding: 15px;
   font-family: Noto Sans KR;
@@ -55,41 +49,37 @@
 }
 </style>
 </head>
-<%
-//세션값 얻기
-String saveok=(String)session.getAttribute("saveok");
-String myid="";
-if(saveok!=null){
-	myid=(String)session.getAttribute("myid");
-}
-%>
 <body>
+	<%
+	request.setCharacterEncoding("utf-8");
+	String name=request.getParameter("name");
+	String hp=request.getParameter("hp");
+
+	memberDao dao=new memberDao();
+	String id=dao.idfind(name, hp);
+	%>
+	<%
+	if(id!=null){
+	%>
 	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:200px; border: 1px solid">
-	<br><br><br><h2>로그인</h2></div>
-	<form action="login/loginaction.jsp" method="post" class="form-inline">
-	
-	<div class="text">
-	<input name="id" type="text" class="id" placeholder="아이디"
-	value="<%=myid %>">
-	</div>
-	
-	<div class="text">
-	<input name="pass" type="password" class="pass" placeholder="비밀번호">
-	</div>
-	
-	<tr>
-	<td colspan="2" align="center">
-	<input type="checkbox" name="cbsave"
-	<%=saveok==null?"":"checked" %>>아이디 저장 &nbsp;&nbsp;&nbsp;
-	<a href="index.jsp?main=login/idfind.jsp">아이디 찾기</a>
-	&nbsp;<a>/</a>&nbsp;
-	<a href="index.jsp?main=login/passfind.jsp">비밀번호 찾기</a>
-	</td>
-	</tr>
-	
-	<br><br><button type="submit" class="btn">로그인</button>
-	<p class="text">회원이 아니신가요? &nbsp;&nbsp;&nbsp; <a href="index.jsp?main=member/memberform.jsp">회원가입</a></p>
+	<br><br><br><h2>아이디 찾기 검색 결과</h2></div>
+	<form action="index.jsp?main=login/loginform.jsp" method="post" class="form-inline">
+	<h2><div><%=name %></div>님의 아이디는<br>
+	<div><%=id %></div>입니다</h2>
+	<br><button type="submit" class="btn">로그인 화면으로 돌아가기</button>
 	</form>
+	<%
+	} else {
+	%>
+	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:200px; border: 1px solid">
+	<br><br><br><h2>아이디 찾기 검색 결과</h2></div>
+	<form action="index.jsp?main=login/idfind.jsp" method="post" class="form-inline">
+	<h4>등록된 정보가 없습니다.</h4>
+	<br><button type="submit" class="btn">다시찾기</button>
+	</form>
+	<%
+	}
+	%>
 
 </body>
 </html>

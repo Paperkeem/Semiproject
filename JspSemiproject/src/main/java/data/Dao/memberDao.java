@@ -191,5 +191,34 @@ DbConnect db=new DbConnect();
 	
 		return b;
 	}
+	
+	//아이디 찾기
+	public String idfind(String name, String hp) {
+		String id="";
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select id from member where name=? and hp=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, hp);
+			
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				id=rs.getString("id");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
+	//비밀번호 찾기
+	
 }
 

@@ -32,7 +32,7 @@ String myid=(String)session.getAttribute("myid");
 		<a href="index.jsp?main=login/logoutform.jsp">로그아웃</a>&nbsp;&nbsp;&nbsp;			
 		<%}%>
 		<a href="index.jsp?main=member/memberform.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;
-		<a href="#">마이페이지</a>&nbsp;&nbsp;&nbsp;
+		<a href="index.jsp?main=member/mypage.jsp">마이페이지</a>&nbsp;&nbsp;&nbsp;
 		<a href="index.jsp?main=shop/cart.jsp">장바구니</a>&nbsp;&nbsp;&nbsp;&nbsp;
 	</ul>
 </div>

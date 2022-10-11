@@ -17,7 +17,7 @@
 		session.setAttribute("saveok", cbsave==null?null:"yes");
 		
 		
-		response.sendRedirect("../index.jsp?main=login/loginmain.jsp");
+		response.sendRedirect("../index.jsp");
 	}else{%>
 	
 		<script type="text/javascript">

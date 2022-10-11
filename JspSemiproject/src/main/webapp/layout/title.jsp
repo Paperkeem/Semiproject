@@ -18,11 +18,19 @@ ul{
 float: right;
 }
 </style>
+<%
+String loginok=(String)session.getAttribute("loginok");
+String myid=(String)session.getAttribute("myid");
+%>
 </head>
 <body>
 <div style="margin-top: 0px; height: 40px; background-color: #eeeeee;">
 	<ul style="line-height:40px;">
-		<a href="index.jsp?main=login/loginform.jsp">로그인</a>&nbsp;&nbsp;&nbsp;
+		<%if(loginok==null){%>
+		<a href="index.jsp?main=login/loginform.jsp">로그인</a>&nbsp;&nbsp;&nbsp;			
+		<%}else{%>
+		<a href="index.jsp?main=login/logoutform.jsp">로그아웃</a>&nbsp;&nbsp;&nbsp;			
+		<%}%>
 		<a href="index.jsp?main=member/memberform.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;
 		<a href="#">마이페이지</a>&nbsp;&nbsp;&nbsp;
 		<a href="index.jsp?main=shop/cart.jsp">장바구니</a>&nbsp;&nbsp;&nbsp;&nbsp;

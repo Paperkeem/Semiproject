@@ -23,8 +23,9 @@ td{vertical-align : bottom;}
 </style>
 </head>
 <%
-//String id=(String)session.getAttribute("myid");
-String id="paper";
+String id=(String)session.getAttribute("myid");
+String loginok=(String)session.getAttribute("loginok");
+
 
 shopDao dao=new shopDao();
 List<HashMap<String,String>>list=dao.getCartList(id);
@@ -47,7 +48,7 @@ int result=0;
 			<th>선택</th>
 		</tr>
 		<%
-		if(list.size() == 0)
+		if(list.size() == 0 || loginok==null)
 		{%>
 			<tr>			
 				<td colspan="10" style="text-align: center; color: lightgray;">장바구니에 담긴 상품이 존재하지 않습니다</td>

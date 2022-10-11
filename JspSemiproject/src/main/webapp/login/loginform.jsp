@@ -69,7 +69,7 @@ if(saveok!=null){
 	<form action="login/loginaction.jsp" method="post" class="form-inline">
 	
 	<div class="text">
-	<input name="id" type="text" class="id" placeholder="아이디">
+	<input name="id" type="text" class="id" value="<%=myid%>" placeholder="아이디">
 	</div>
 	
 	<div class="text">

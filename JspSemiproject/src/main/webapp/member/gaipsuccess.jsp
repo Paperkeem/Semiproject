@@ -29,7 +29,7 @@ String id=request.getParameter("id");
 memberDao dao=new memberDao();
 String name=dao.getName(id);
 %>
-<div style="margin-left: 900px; margin-top: 150px;">
+<div style="margin-left: 850px; margin-top: 150px;">
  <b><h3><%=name %>님의 회원가입을 축하합니다</h3></b>
  <br><br>
  <button type="button" class="btn"

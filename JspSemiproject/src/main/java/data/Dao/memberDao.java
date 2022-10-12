@@ -32,8 +32,7 @@ DbConnect db=new DbConnect();
 			
 			if(rs.next())
 			{
-				if(rs.getInt(1)==1)
-					isid=1;
+				isid=rs.getInt(1);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -41,7 +40,6 @@ DbConnect db=new DbConnect();
 		}finally {
 			db.dbClose(rs, pstmt, conn);
 		}
-		
 		return isid;
 	}
 	
@@ -68,7 +66,6 @@ DbConnect db=new DbConnect();
 		}finally {
 			db.dbClose(rs, pstmt, conn);
 		}
-		
 		return name;
 	}
 	
@@ -78,7 +75,7 @@ DbConnect db=new DbConnect();
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		
-		String sql="insert into member (name,id,pass,type,gomin,hp,gaipday) values(?,?,?,?,?,?,now())";
+		String sql="insert into member (name,id,pass,hp,type,gomin,gaipday) values(?,?,?,?,?,?,now())";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -90,7 +87,6 @@ DbConnect db=new DbConnect();
 			pstmt.setString(5, dto.getType());
 			pstmt.setString(6, dto.getGomin());
 			
-			
 			pstmt.execute();
 			
 		} catch (SQLException e) {
@@ -98,8 +94,7 @@ DbConnect db=new DbConnect();
 			e.printStackTrace();
 		}finally {
 			db.dbClose(pstmt, conn);
-		}
-		
+		}	
 	}
 	
 	//전체출력
@@ -193,14 +188,14 @@ DbConnect db=new DbConnect();
 	}
 	
 	//아이디 찾기
-	public String idfind(String name, String hp) {
+	public String getid(String name, String hp) {
 		String id="";
 		
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select id from member where name=? and hp=?";
+		String sql="select from member where name=? and hp=?";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -214,11 +209,39 @@ DbConnect db=new DbConnect();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			db.dbClose(rs, pstmt, conn);
 		}
 		return id;
 	}
 	
 	//비밀번호 찾기
-	
+	public String getpass(String name, String id, String hp) {
+		String pass="";
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select from member where name=?, id=? and hp=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, id);
+			pstmt.setString(3, hp);
+			
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				pass=rs.getString("pass");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbClose(rs, pstmt, conn);
+		}
+		return pass;
+	}
 }
 

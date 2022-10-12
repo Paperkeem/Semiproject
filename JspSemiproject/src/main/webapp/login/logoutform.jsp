@@ -35,7 +35,7 @@
 	<h4><%=name %>님 로그인 중</h4>
 	<h4>정말 로그아웃 하시겠습니까?</h4><br><br>
 	<button type="button" class="btn"
-	onclick="location.href='index.jsp?main=login/loginform.jsp'">확인</button>
+	onclick="location.href='index.jsp?main=login/logoutaction.jsp'">확인</button>
 	<button type="button" class="btn"
 	onclick="location.href='index.jsp'">취소</button>
 </div>

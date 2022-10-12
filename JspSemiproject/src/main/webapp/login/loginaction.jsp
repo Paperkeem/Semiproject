@@ -16,10 +16,8 @@
 		session.setAttribute("myid", id);
 		session.setAttribute("saveok", cbsave==null?null:"yes");
 		
-		
 		response.sendRedirect("../index.jsp");
 	}else{%>
-	
 		<script type="text/javascript">
 			alert("아이디 또는 비번이 맞지않습니다");
 			history.back();

@@ -1,6 +1,5 @@
 <%@page import="data.Dao.memberDao"%>
 <%@page import="data.Dto.memberDto"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,17 +18,17 @@ request.setCharacterEncoding("utf-8");
 String name=request.getParameter("name");
 String id=request.getParameter("id");
 String pass=request.getParameter("pass");
+String hp=request.getParameter("hp");
 String type=request.getParameter("type");
 String gomin=request.getParameter("gomin");
-String hp=request.getParameter("hp");
 
 memberDto dto=new memberDto();
 dto.setName(name);
 dto.setId(id);
 dto.setPass(pass);
+dto.setHp(hp);
 dto.setType(type);
 dto.setGomin(gomin);
-dto.setHp(hp);
 
 memberDao dao=new memberDao();
 dao.insertMember(dto);

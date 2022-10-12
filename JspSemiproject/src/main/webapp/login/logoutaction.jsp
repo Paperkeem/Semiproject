@@ -10,9 +10,13 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+alert("로그아웃 되었습니다.");
+location.href='index.jsp?main=login/loginform.jsp';
+</script>
 <%
 session.removeAttribute("loginok");
-response.sendRedirect("../index.jsp");
+response.sendRedirect("../index.jsp?main=login/loginmain.jsp");
 %>
 </body>
 </html>

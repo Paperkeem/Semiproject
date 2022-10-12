@@ -1,3 +1,6 @@
+<%@page import="data.Dto.qnaDto"%>
+<%@page import="data.Dao.qnaDao"%>
+<%@page import="data.Dao.memberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,6 +19,15 @@ font-family: 'Noto Sans KR';
 </style>
 
 </head>
+<% 
+String loginok = (String)session.getAttribute("loginok");
+memberDao mdao=new memberDao();
+
+
+
+String num=request.getParameter("num");
+String pass=request.getParameter("pass");
+%>
 <body>
 
 <div>
@@ -23,12 +35,13 @@ font-family: 'Noto Sans KR';
 <img alt="" src="" id="blah" style="position: absolute; left: 1300px;top:250px;max-width: 200px; max-height: 300px;">
 
   <form action="qna/qnaaddaction.jsp" method="post" enctype="multipart/form-data">
+   <input type="hidden" name="num" id="num" value=<%=num %>>
+   
   <br>
-  <b style="margin: 30px 500px; font-size:20px; ">QnA 게시글 등록</b>
-  <h5 class="alert alert-success" style="width: 700px; margin: 50px 500px; font-size: 15px;">게시글을 등록해주세요</h5>
+  <b style="margin: 30px 500px; font-size:20px; ">문의 게시글 등록</b>
+  <h5 class="alert alert-success" style="width: 700px; margin: 50px 500px; font-size: 15px;">문의글을 등록해주세요</h5>
     <table class="table table-hover" style="margin: 10px 500px; width: 700px;">
-    
-    
+
    
     
      <tr>

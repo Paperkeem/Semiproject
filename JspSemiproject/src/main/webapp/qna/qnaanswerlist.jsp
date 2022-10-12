@@ -11,7 +11,7 @@
 String num=request.getParameter("num");
 qnaDao dao=new qnaDao();
 List<qnaDto>list=dao.getAnswerList(num);
-
+SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
 JSONArray arr=new JSONArray();
 
@@ -23,6 +23,7 @@ for(qnaDto dto:list)
 	ob.put("pass", dto.getPass());
 	ob.put("content", dto.getContent());
 	ob.put("answer", dto.getAnswer());
+	ob.put("writeday", sdf.format(dto.getWriteday()));
 	
 	
 	arr.add(ob);

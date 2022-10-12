@@ -144,13 +144,13 @@ DbConnect db=new DbConnect();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select * from where num=? and pass=?";
+		String sql="select * from member where num=? and pass=?";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
 			
-			pstmt.setString(1,  num);
-			pstmt.setString(2, num);
+			pstmt.setString(1, num);
+			pstmt.setString(2, pass);
 			rs=pstmt.executeQuery();
 			
 			if(rs.next())
@@ -190,6 +190,7 @@ DbConnect db=new DbConnect();
 		}
 	
 		return b;
+
 	}
 }
 

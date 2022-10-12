@@ -238,16 +238,21 @@ public class qnaDao {
 	}
 	
 	//answer 삭제
-	public void delelteAnswer(String num)
+	public void deleteAnswer(String num,String answer)
 	{
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		
-		String sql="delete from qna where num=?";
+		String sql="update qna set answer=? where num=?";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, num);
+		
+			
+			pstmt.setString(1, answer);
+	        pstmt.setString(2, num);
+			
+		
 			pstmt.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -282,6 +287,29 @@ public class qnaDao {
 		}
 		
 	}
-	
+	public boolean isPassEqual(String num,String pass)
+	{
+		boolean b=false;
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select * from qna where num=? and pass=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			
+			pstmt.setString(1,  num);
+			pstmt.setString(2, pass);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next())
+				b=true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
+	}
 
 }

@@ -36,6 +36,7 @@ public class replyDao {
 		}finally {
 			db.dbClose(pstmt, conn);
 		}
+		
 	}
 	
 	// 총 개수
@@ -97,7 +98,6 @@ public class replyDao {
 				
 				list.add(dto);
 			}
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,5 +201,30 @@ public class replyDao {
 		}finally {
 			db.dbClose(pstmt, conn);
 		}
+	}
+	
+	// 별점 총점 구하기
+	public double avgRating(String shopnum) {
+		double avgRating=0;
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs = null;
+		
+		String sql="select avg(rating) from reply where shopnum=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, shopnum);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				avgRating=rs.getDouble(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return avgRating;
 	}
 }

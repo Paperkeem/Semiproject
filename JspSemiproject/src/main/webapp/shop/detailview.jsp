@@ -1,3 +1,9 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="data.Dto.memberDto"%>
+<%@page import="data.Dao.memberDao"%>
+<%@page import="data.Dto.replyDto"%>
+<%@page import="java.util.List"%>
+<%@page import="data.Dao.replyDao"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="data.Dto.shopDto"%>
 <%@page import="data.Dao.shopDao"%>
@@ -11,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shop/star.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style type="text/css">
@@ -67,16 +74,41 @@ cursor: pointer;
 .btn-like, .btn-order, .btn-cart{
 height: 60px;
 }
+
+/* 리뷰 박스 */
+.reply-box{
+border-bottom: 1px solid lightgray; 
+padding-top: 20px; 
+padding-bottom: 10px;
+font-weight:300;
+}
+
+/* 리뷰 별점 */
+.inner-star::before{color: #283C82;}
+.outer-star {position: relative;display: inline-block;color: #CCCCCC;}
+.inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
+.outer-star::before, .inner-star::before {content: '\f005 \f005 \f005 \f005 \f005';font-family: 'Font Awesome 5 free';font-weight: 700;}
+
 </style>
 </head>
 <%
+// 디테일 
 String shopnum = request.getParameter("shopnum");
-String num = "1";
+
+memberDao mdao=new memberDao();
+String myid=(String)session.getAttribute("myid");
+String num = mdao.getNum(myid);
+
 shopDao dao = new shopDao();
 shopDto dto = dao.getData(shopnum);
 
 int price = Integer.parseInt(dto.getPrice());
 DecimalFormat df = new DecimalFormat("###,###");
+
+// 리뷰
+replyDao rdao = new replyDao();
+// 리뷰 별점 평균
+double avgRating = (double)rdao.avgRating(shopnum);
 
 // 리뷰 5개씩 불러올 변수
 // 페이징에 필요한 변수
@@ -85,13 +117,13 @@ int totalPage; // 총 페이지수
 int startPage; // 각 블럭의 시작페이지
 int endPage; // 각 블럭의 끝페이지
 int start; // 각 페이지의 시작번호
-int perPage=5; // 한 페이지당 보여질 글의 개수
+int perPage=3; // 한 페이지당 보여질 글의 개수
 int perBlock=5; // 한 블럭당 보여지는 페이지 개수
 int currentPage; // 현재 페이지
 int no;
 
 // 총 개수 : 
-	totalCount=dao.getTotalCount();
+	totalCount=rdao.getTotalCount(shopnum);
 
 // 현재 페이지 번호 읽기(null일 경우는 1 페이지로 설정)
 if(request.getParameter("currentPage")==null){
@@ -186,13 +218,15 @@ no=totalCount-(currentPage-1)*perPage;
 				
 				<div class="border-box" style="padding-top: 20px; padding-bottom: 20px;">
 					<p style="font-weight: 400; font-size: 25pt;"><%=dto.getSangpum() %></p>
-					<span class="star glyphicon glyphicon-star"></span>
-					<span class="star glyphicon glyphicon-star"></span>
-					<span class="star glyphicon glyphicon-star"></span>
-					<span class="star glyphicon glyphicon-star"></span>
-					<span class="star glyphicon glyphicon-star"></span>
-					<span>0.0점</span>
-					<span style="color: gray;">(0건)</span>
+					
+					<!-- 별점 -->
+					<span class='RatingStar'>
+					  <span class='RatingScore'>
+					    <span class='outer-star'><span class='inner-star' style="width: <%=avgRating * 20%>%;"></span></span>
+					  </span>
+					</span>
+					<span><%=String.format("%.1f", avgRating) %>점</span>
+					<span style="color: gray;">(<%=totalCount %>건)</span>
 				</div>
 				
 				
@@ -251,7 +285,7 @@ no=totalCount-(currentPage-1)*perPage;
       <br>
       <br>
       <br>
-      <img src="menu/images/sangppum-page.png" style="margin-left: 25%; width: 50%;">
+      <img src="menu/images/skinbanner.png" style="width: 100%;">
     </div>
       
     <!-- 리뷰 -->
@@ -260,6 +294,76 @@ no=totalCount-(currentPage-1)*perPage;
       <br>
       <br>
       <button type="button" id="write-reply" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-pencil"></span> 리뷰 등록</button>
+	<!-- 리뷰 불러오기 -->    
+	<%
+	List<replyDto>list=rdao.getReplyList(shopnum, start, perPage);
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+	
+	for(replyDto rdto : list){
+		memberDto mdto=mdao.getOneData(rdto.getNum());
+		int rating = rdto.getRating() * 20; %>
+	
+		<div class="reply-box">
+			<p><%=mdto.getId() %>&nbsp;&nbsp;
+			<span style="color:gray">| <%=mdto.getType() %>/<%=mdto.getGomin() %> |
+			
+			<!-- 별점 -->
+			<span class='RatingStar'>
+			  <span class='RatingScore'>
+			    <span class='outer-star'><span class='inner-star' style="width: <%=rating%>%;"></span></span>
+			  </span>
+			</span>
+			
+			&nbsp;<%=sdf.format(rdto.getWriteday()) %></span>
+			
+			<!-- 삭제버튼 -->
+			<%
+			if(mdto.getId().equals(myid)){%>
+				<span style="float: right;">
+					<span class="glyphicon glyphicon-remove reply-delete" style="color:lightgray; cursor: pointer;" 
+					idx="<%=rdto.getIdx()%>"></span>
+				</span>
+			<%}
+			%>
+			</p>
+			<p><%=rdto.getContent() %></p>
+		</div>	
+	<%}
+	%>
+		<!-- 리뷰 페이징 처리 -->
+			<div style="clear: both;"></div>
+			<ul class="pagination"style="margin-left: auto;margin-right: 40%;">
+		      <%
+		    if(startPage>1)
+		    {%>
+		    	<li>
+		    	  <a href="index.jsp?main=shop/detailview.jsp?shopnum=<%=shopnum %>&currentPage=<%=startPage-1%>">이전</a>
+		    	</li>
+		    <%}
+		    for(int pp=startPage;pp<=endPage;pp++)
+		    {
+		    	if(pp==currentPage)
+		    	{%>
+		    		<li class="active">
+		    		  <a href="index.jsp?main=shop/detailview.jsp?shopnum=<%=shopnum %>&currentPage=<%=pp%>"><%=pp %></a>
+		    		</li>
+		    	<%}else{%>
+		    		<li >
+		    		  <a href="index.jsp?main=shop/detailview.jsp?shopnum=<%=shopnum %>&currentPage=<%=pp%>"><%=pp %></a>
+		    		</li>
+		    	<%}
+		    }
+		    if(endPage<totalPage)
+		    {%>
+		    	<li>
+		    	  <a href="index.jsp?main=shop/detailview.jsp?shopnum=<%=shopnum %>&currentPage=<%=endPage+1%>">다음</a>
+		    	</li>
+		    <%}
+		    %>
+		  </ul>
+	  <!-- 리뷰 페이징 end -->
+	  
     </div>
   </div>
   
@@ -393,21 +497,27 @@ $("#reply-insert").click(function(){
 			data:data,
 			success:function(){
 				alert("리뷰를 성공적으로 등록하였습니다.");
+				location.reload();
 			}
 		});	
 });
 
-replylist();
-
-// 리뷰 리스트 5개씩 불러오기
-function replylist(){
-	var loginid=$("#myid").val();
-	var shopnum=$("#shopnum").val();
-	var start=<%=start%>
-	var perpage=<%=perPage%>
-	// console.log(start,perpage)
+// 리뷰 삭제
+$(".reply-delete").click(function(){
+	var idx=$(this).attr("idx");
 	
-}
+	$.ajax({
+		type:"post",
+		url:"shop/replydelete.jsp",
+		dataType:"html",
+		data:{"idx":idx},
+		success:function(){
+			alert("리뷰를 성공적으로 삭제하였습니다.");
+			location.reload();
+		}
+	});	
+});
+
 
 </script>
 </body>

@@ -60,7 +60,9 @@ int result=0;
 		%>
 				<tr>
 					<td>
-						<input type="checkbox" name="idx" class="idx" idx="<%=map.get("idx")%>">
+						<input type="checkbox" name="idx" class="idx" 
+						idx="<%=map.get("idx")%>" shopnum="<%=map.get("shopnum")%>" 
+						cnt="<%=map.get("cnt") %>" price="<%=map.get("price")%>">
 					</td>
 					<td>
 						<div shopnum="<%=map.get("shopnum") %>" class="sangpum">
@@ -90,8 +92,8 @@ int result=0;
 		</tr>
 	</table>
 	<hr>
-	선택상품을&nbsp;&nbsp;<button type="button" class="btn btn-sm" id="btndel"><span class="glyphicon glyphicon-remove"> <b style="margin-top: -10px;">삭제하기</b></span></button>
-	<button type="button" class="btn btn-danger btn-sm" style="float: right;"><span class="glyphicon glyphicon-shopping-cart"> <b style="color:white; margin-top: -10px;">주문하기</b></span></button>
+	선택상품을&nbsp;&nbsp;<button type="button" class="btn btn-sm" id="btndel"><span class="glyphicon glyphicon-remove"><b style="margin-top: -10px;"> 삭제하기</b></span></button>
+	<button type="button" class="btn btn-danger btn-sm" id="btn-order" style="float: right;"><span class="glyphicon glyphicon-shopping-cart"><b style="color:white; margin-top: -10px;"> 주문하기</b></span></button>
 </form>
 
 
@@ -102,6 +104,10 @@ $("div.sangpum").click(function(){
 	var shopnum=$(this).attr("shopnum");
 	location.href="index.jsp?main=shop/detailview.jsp?shopnum="+shopnum;
 })
+
+// 전체 체크하기
+$("#allcheck").prop("checked", true);
+$(".idx").prop("checked",true);
 
 // 체크값 넘기기
 $("#allcheck").click(function(){
@@ -134,6 +140,24 @@ $("button.del").click(function(){
 	var idx=$(this).attr("idx");
 	alert("해당 상품을 장바구니에서 삭제합니다");
 	location.href="shop/cartdelete.jsp?idx="+idx;
+})
+
+// 결제 이동
+$("#btn-order").click(function(){
+	
+	$(".idx:checked").each(function(idx){
+		var shopnum = $(this).attr("shopnum");
+		var cnt = $(this).attr("cnt");
+		var price = $(this).attr("price");
+		// console.log(shopnum,cnt,price);
+	});
+	
+	
+	if(<%=loginok!=null%>){
+		location.href="index.jsp?main=order/orderaction.jsp";
+	}else if(<%=loginok==null%>){
+		alert("로그인을 먼저 진행해주세요.");
+	}
 })
 </script>
 </body>

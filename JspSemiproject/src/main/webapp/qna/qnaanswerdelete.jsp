@@ -3,8 +3,9 @@
     pageEncoding="utf-8"%>
 <%
 String num=request.getParameter("num");
-qnaDao dao=new qnaDao();
-dao.delelteAnswer(num);
+String answer=request.getParameter("answer");
 
+qnaDao dao=new qnaDao();
+dao.deleteAnswer(num, answer);
 
 %>

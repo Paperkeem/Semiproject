@@ -1,4 +1,4 @@
-<%@page import="java.text.NumberFormat"%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="data.Dto.shopDto"%>
 <%@page import="java.util.List"%>
 <%@page import="data.Dao.shopDao"%>
@@ -51,7 +51,7 @@ width: 80%;
 background-image: url('shopsave/bh3.jpeg');
 	opacity:0.9; 
 		width:100%;
-		height:180px; 
+		height:150px; 
 		background-position:center center; 
 		background-size: cover; text-align: center;
 		padding-top: 45px;
@@ -62,14 +62,52 @@ font-size: 16px;
 color:gray;
 }
 
-.fim{
-    object-fit: cover;
-    border-radius: 5px;
-   	padding: 0 atuo;
+.p-box{
+display: inline-block;
+width: 190px;
+height: 220px;
+overflow: hidden;
 }
+img.photo{
+display: inline-block;
+width: 100%;
+height:200px;
+overflow: hidden;
+object-fit : contain;
+}
+
 .prd{
-margin-left:12%;
+margin-left:11%;
+margin-top: 90px;
+}
+
+.productlist{
+float: left;
+margin-right: 20px;
+margin-bottom: 10px;
+width:230px;
+padding: 10px 10px 20px 10px;
+border-radius: 5px;
+}
+
+.sidebar{
+width:850px;
 margin-top: 30px;
+margin-right: 130px;
+}
+
+ul{
+list-style: none;
+}
+
+ul.sidelist li{
+border:1px solid lightgray;
+padding:10px 10px 10px 10px;
+float: left;
+margin-left: 10px;
+}
+ul.sidelist li a{
+color:gray;
 }
 </style>
 <script type="text/javascript">
@@ -136,8 +174,7 @@ $(function(){
 shopDao dao = new shopDao();
 String sangpumtype = request.getParameter("sangpumtype");
 String category = request.getParameter("category");
-NumberFormat nf = NumberFormat.getCurrencyInstance();
-
+DecimalFormat df = new DecimalFormat("###,###");
 //페이징 
 //페이징에 필요한 변수
 int totalCount;
@@ -243,6 +280,17 @@ if(endPage>totalPage)
 			<h2 style="color:black;">바디&헤어케어</h2>
 		</div>
 	 	</div>
+	 	
+	 	 	<div class="sidebar">
+		<ul class="sidelist">
+		<li><a href="">전체보기</a></li>	
+		<li><a href="">바디케어</a></li>
+		<li><a href="">헤어스타일링</a></li>
+		<li><a href="">향수</a></li>
+		<li><a href="">미용소품</a></li>
+		</ul>
+		</div>
+	 	
 	 	<div class="prd">
      <%
 	 int i = 1;
@@ -252,18 +300,18 @@ if(endPage>totalPage)
 		 {
 			if(dto.getSangpumtype().equals(sangpumtype)){
 			%>
-			<div class="productlist" style="float: left; margin-right: 30px;">
-			<div class="pim">
+			<div class="productlist" >
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;"></a>
+			<div class="p-box">
+			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo">
 			</div>
 			<div class="info">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-				<h4><%=dto.getPrice()%>원</h4></a>
-			</div>
+					<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4><%=df.format(price)%>원</h4></a>			
+							</div>
 			<div class="addmenu">
 			<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
 				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
@@ -288,16 +336,16 @@ if(endPage>totalPage)
 			 {
 			if(dto.getCategory().equals(category)){%>
 			<div class="productlist" style="float: left; margin-right: 30px;">
-			<div class="pim">
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;" ></a>
+			<div class="p-box">
+			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo">
 			</div>
 			<div class="info">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-				<h4><%=dto.getPrice()%>원</h4></a>
+				<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4><%=df.format(price)%>원</h4></a>			
 			</div>
 			<div class="addmenu">
 				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>

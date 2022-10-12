@@ -193,6 +193,7 @@ DbConnect db=new DbConnect();
 
 	}
 	
+
 	// num 값에 따른 dto 반환
 	public memberDto getOneData(String num) {
 		memberDto dto = new memberDto();
@@ -218,13 +219,13 @@ DbConnect db=new DbConnect();
 				dto.setGomin(rs.getString("gomin"));
 				dto.setGaipday(rs.getTimestamp("gaipday"));
 			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			db.dbClose(rs, pstmt, conn);
 		}
-		
 		return dto;
 	}
 	
@@ -255,5 +256,6 @@ DbConnect db=new DbConnect();
 			
 			return num;
 		}
+
 }
 

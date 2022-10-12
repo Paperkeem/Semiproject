@@ -1,4 +1,5 @@
-<%@page import="java.text.NumberFormat"%>
+<%@page import="data.Dao.memberDao"%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="data.Dto.shopDto"%>
 <%@page import="java.util.List"%>
 <%@page import="data.Dao.shopDao"%>
@@ -49,9 +50,9 @@ width: 80%;
 }
 .listheader{
 background-image: url('shopsave/8.jpeg');
-	opacity:0.9; 
+		opacity:0.9; 
 		width:100%;
-		height:180px; 
+		height:150px; 
 		background-position:center center; 
 		background-size: cover; text-align: center;
 		padding-top: 45px;
@@ -62,15 +63,55 @@ font-size: 16px;
 color:gray;
 }
 
-.fim{
-    object-fit: cover;
-    border-radius: 5px;
-   	padding: 0 atuo;
+.p-box{
+display: inline-block;
+width: 190px;
+height: 220px;
+overflow: hidden;
 }
+img.photo{
+display: inline-block;
+width:100%;
+height:200px;
+overflow: hidden;
+object-fit : contain;
+}
+
 .prd{
-margin-left:12%;
-margin-top: 30px;
+margin-left:11%;
+margin-top: 90px;
 }
+
+.productlist{
+float: left;
+margin-right: 20px;
+margin-bottom: 10px;
+width:230px;
+padding: 10px 10px 20px 10px;
+border-radius: 5px;
+}
+
+.sidebar{
+width:850px;
+margin-top: 30px;
+margin-left: 15px;
+
+}
+
+ul{
+list-style: none;
+}
+
+ul.sidelist li{
+border:1px solid lightgray;
+padding:10px 10px 10px 10px;
+float: left;
+margin-left: 10px;
+}
+ul.sidelist li a{
+color:gray;
+}
+
 </style>
 <script type="text/javascript">
 $(function(){
@@ -112,30 +153,61 @@ $(function(){
 		 
 		 //좋아요 처리 
 		$("span.likes").click(function(){
-			var shopnum = $(this).attr("shopnum");
+			var shopnum = $("#shopnum").val();
 			var tag = $(this);
-			//console.log(shopnum); 
+			//alert(shopnum); 
 			$.ajax({
 				type:"get",
 				dataType:"json",
 				url:"shop/likechu.jsp",
 				data:{"shopnum":shopnum},
 				success:function(res){
-					tag.animate({'font-size':'21px'},100,function(){
+					tag.animate({'font-size':'21px'},200,function(){
 						$(this).css("font-size","16px");
 						tag.next().text(res.likechu);
 					});
 				}
-			});
+			}); 
 		})	
+		
+		
+		$("span.cartin").click(function(){
+			var formdata = $("#add").serialize()
+		//console.log(formdata);
+		  $.ajax({
+			type:"post",
+			url:"shop/detailproc.jsp",
+			dataType:"html",
+			data:formdata,
+			success:function(){
+				var a=confirm('해당 상품을 장바구니에 저장했습니다\n장바구니로 이동하려면 확인을 클릭해주세요');
+				if(a){
+					location.href="index.jsp?main=shop/cart.jsp";
+				}
+			}
+		});    
+	
+		
+	})
+
+
+
 })
+
 </script>
 </head>
 <%
 shopDao dao = new shopDao();
 String sangpumtype = request.getParameter("sangpumtype");
 String category = request.getParameter("category");
-NumberFormat nf = NumberFormat.getCurrencyInstance();
+String loginok = (String)session.getAttribute("loginok");
+String myid = (String)session.getAttribute("myid");
+
+//아이디에 해당하는 멤버 번호 
+memberDao mdao = new memberDao();
+String num = mdao.getNum(myid);
+
+DecimalFormat df = new DecimalFormat("###,###");
 
 //페이징 
 //페이징에 필요한 변수
@@ -173,6 +245,7 @@ if(endPage>totalPage)
 
 //각 페이지에서 필요한 게시글 불러오기
 	List<shopDto> list = dao.getList(start, perPage);
+
 
 %>
 <body>
@@ -243,42 +316,64 @@ if(endPage>totalPage)
 			<h2 style="color:black;">스킨케어&클렌징</h2>
 		</div>
 	 	</div>
+	
+	 <div class="sidebar">
+		<ul class="sidelist">
+		<li><a href="index.jsp?main=shop/shoplist.jsp?category=skincare_cleansing">전체보기</a></li>	
+		<li><a href="">토너/로션</a></li>
+		<li><a href="">크림/젤</a></li>
+		<li><a href="">에센스/세럼</a></li>
+		<li><a href="">마스크/팩</a></li>
+		<li><a href="">클렌징</a></li>
+		</ul>
+	</div>
+	
+
 	 	<div class="prd">
-     <%
-	 int i = 1;
-	 if( sangpumtype != null){
+		<%
+		 int i = 1;
+		 if( sangpumtype != null){
 		 
 		 for(shopDto dto : list)
+			 
 		 {
 			if(dto.getSangpumtype().equals(sangpumtype)){
 			%>
-			<div class="productlist" style="float: left; margin-right: 30px;">
-			<div class="pim">
+			<form id="add">
+			<input type="hidden" id="shopnum" name="shopnum" value="<%=dto.getShopnum()%>">
+     		<input type="hidden" id="num" name="num" value="<%=num%>">
+     		<input type="hidden" id="cnt" name="cnt" value="1">
+			<div class="productlist">
+			<div class="p-box">
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;"></a>
+			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo"></a>
 			</div>
 			<div class="info">
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-				<h4><%=dto.getPrice()%>원</h4></a>
+				<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4><%=df.format(price)%>원</h4></a>
 			</div>
+			
 			<div class="addmenu">
 			<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
-				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
-				shopnum="<%=dto.getShopnum()%>"></span>
-				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
-				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;" 
-				onclick="location.href='index.jsp?main=shop/cart.jsp'"></span>
+			<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;"></span>
+			<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
+			<% if(loginok!=null){%>
+			<span class="glyphicon glyphicon-shopping-cart cartin" style="cursor: pointer;color:gray;"></span>
+			
+			<%}%>
 			</div>
 			</div>
+			
 			<%
 				if((i+4)%4==0)
 				{%>
-				<br>
+				<br> </form>
 				<%} i++;
-
+			
 			}
 		 }
 		 
@@ -287,40 +382,45 @@ if(endPage>totalPage)
 		 for(shopDto dto : list)
 			 {
 			if(dto.getCategory().equals(category)){%>
-			<div class="productlist" style="float: left; margin-right: 30px;">
-			<div class="pim">
+			<form id="add">
+			<input type="hidden" id="shopnum" name="shopnum" value="<%=dto.getShopnum()%>">
+     		<input type="hidden" id="num" name="num" value="<%=num%>">
+     		<input type="hidden" id="cnt" name="cnt" value="1">
+			<div class="productlist">
+			<div class="p-box">
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;" ></a>
+			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo"></a>
 			</div>
 			<div class="info">
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-				<h4><%=dto.getPrice()%>원</h4></a>
+				<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4><%=df.format(price)%>원</h4></a>
 			</div>
 			<div class="addmenu">
 				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
-				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
-				shopnum="<%=dto.getShopnum()%>"></span>
+				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;"></span>
 				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
-				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;" 
-				onclick="location.href='index.jsp?main=shop/cart.jsp'"></span>
+				<% if(loginok!=null){
+			%>
+			<span class="glyphicon glyphicon-shopping-cart cartin" style="cursor: pointer;color:gray;"></span>
+			<input type="hidden" id="cnt" name="cnt" value="1">
+			<%}%>
 			</div>
 			</div>
 			<%
 				if((i+4)%4==0)
 				{%>
-				<br>
+				<br></form>
 				<%} i++;
 			}
 			 }
-	 }%>
-		     
+		 }%>		  
 	   </div>
 	   </div>
-	   
-  <div style="width: 100px; margin-left:34%;" class="pcontainer">
+  <div style="width: 100px; margin-left:34%; margin-top: 70%;" class="pcontainer">
   <ul class="pagination">
     
     <%
@@ -353,6 +453,7 @@ if(endPage>totalPage)
   
   </ul>
 </div>
+
 </div>
 </body>
 </html>

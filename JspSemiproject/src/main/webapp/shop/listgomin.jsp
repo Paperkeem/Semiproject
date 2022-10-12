@@ -1,3 +1,5 @@
+
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="data.Dto.shopDto"%>
 <%@page import="java.util.List"%>
@@ -54,25 +56,60 @@ background-image: url('shopsave/5.jpeg');
 		height:150px; 
 		background-position:center center; 
 		background-size: cover; text-align: center;
-		padding-top: 65px;
+		padding-top: 45px;
 }
-
 .addmenu
 {
 position:absolute;
 font-size: 16px;
 }
-.fim{
-    object-fit: cover;
-    border-radius: 5px;
-   	padding: 0 atuo;
+.p-box{
+display: inline-block;
+width: 190px;
+height: 220px;
+overflow: hidden;
+}
+img.photo{
+display: inline-block;
+width: 100%;
+height:200px;
+overflow: hidden;
+object-fit : contain;
 }
 
 .prd{
-margin-left:12%;
-margin-top: 30px;
+margin-left:11%;
+margin-top: 90px;
 }
 
+.productlist{
+float: left;
+margin-right: 20px;
+margin-bottom: 10px;
+width:230px;
+padding: 10px 10px 20px 10px;
+border-radius: 5px;
+}
+
+.sidebar{
+width:850px;
+margin-top: 30px;
+margin-left: 70px;
+}
+
+ul{
+list-style: none;
+}
+
+ul.sidelist li{
+border:1px solid lightgray;
+padding:10px 10px 10px 10px;
+float: left;
+margin-left: 10px;
+}
+ul.sidelist li a{
+color:gray;
+}
 </style>
 <script type="text/javascript">
 $(function(){
@@ -86,7 +123,6 @@ $(function(){
 	 
 	 $(".addmenu").fadeOut();
 	 $(".productlist").hover(function(){
-		 
 		 $(this).children(".addmenu").fadeIn(500)},
 		 function(){
 			 $(this).children(".addmenu").fadeOut(500); 
@@ -122,7 +158,7 @@ $(function(){
 
 shopDao dao = new shopDao();
 String gomin = request.getParameter("gomin");
-
+DecimalFormat df = new DecimalFormat("###,###");
 //페이징 
 //페이징에 필요한 변수
 int totalCount;
@@ -198,35 +234,51 @@ if(endPage>totalPage)
 	</div> 
   </div>
   <br>
-
+	
 	<div id="content">
     	<div class="listheader">
 		<div class="headertext">
 			<h2 style="color:black;">피부고민</h2>
 		</div>
 		</div>
+		
+	<div class="sidebar">
+		<ul class="sidelist">
+		<li><a href="index.jsp?main=shop/shoplist.jsp?category=skincare_cleansing">전체보기</a></li>	
+		<li><a href="">모공</a></li>
+		<li><a href="">피부결</a></li>
+		<li><a href="">주름</a></li>
+		<li><a href="">탄력</a></li>
+		<li><a href="">트러블</a></li>
+		<li><a href="">각질</a></li>
+		<li><a href="">민감성</a></li>
+		<li><a href="">피지과다</a></li>
+		</ul>
+	</div>
+		
 	<div class="prd">
 	  <%
 	
 	 int i = 1;
-	 if( gomin != null ){
+	
+	  if( gomin != null ){
 		 
 		 for(shopDto dto : list)
 		 {
 			if(dto.getGomin().equals(gomin)){
 			%>
-			<div class="productlist" style="float: left; margin-right: 30px;">
-			<div class="pim">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black; border-radius: 5px;" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;"></a>
+			<div class="productlist">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
+			<div class="p-box">
+				<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo">
 			</div>
 			<div class="info">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-				<h4><%=dto.getPrice()%>원</h4></a>
-			</div>
+				<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4><%=df.format(price)%>원</h4></a>			
+				</div>
 			<div class="addmenu">
 				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
 				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
@@ -248,23 +300,23 @@ if(endPage>totalPage)
 		 for(shopDto dto : list)
 			 {
 			if(dto.getGomin() != "9"){%>
-			<div class="productlist" style="float: left; margin-right: 30px;">
-			<div class="pim">
+			<div class="productlist" >
 			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
-			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail" style="width:200px; height:200px;"></a>
+			<div class="p-box">
+				<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo">
 			</div>
 			<div class="info">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-				<h4><%=dto.getPrice()%>원</h4></a>
-			</div>
+				<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4><%=df.format(price)%>원</h4></a>			
+				</div>
 			<div class="addmenu">
 				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
 				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
 				shopnum="<%=dto.getShopnum()%>"></span>
-				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
+				<span class="likechu" style="margin-right: 15px;"><%=dto.getLikechu() %></span>
 				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;"></span>
 			</div>
 			</div>

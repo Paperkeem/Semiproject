@@ -63,13 +63,15 @@ font-family: 'Noto Sans KR';
 </style>
     
    <script type="text/javascript">
+   
+   
     $(function(){
     	
    
     
     answerlist();
     
-  
+  //댓글등록
  	var num=$("#num").val();
 	//alert(num);
 	
@@ -106,7 +108,7 @@ font-family: 'Noto Sans KR';
     
     
 	 var num=$("#num").val();
-	
+	 var answer=$("#answer").val();
 	 //alert(num);
   
    	 
@@ -118,7 +120,7 @@ font-family: 'Noto Sans KR';
    		 type:"get",
    		 dataType:"html",
    		 url:"qna/qnaanswerdelete.jsp",
-   		 data:{"num":num},
+   		 data:{"num":num,"answer":answer},
    		 success:function(){
    			 
    		   $("#answerlist").hide();
@@ -132,8 +134,8 @@ font-family: 'Noto Sans KR';
    				answerlist();
    				 }
    				   $("answerlist").show();
-   			
-   				 
+   				$("#answerlist").show("");
+   				location.reload();
    		 }
    	
    		 
@@ -143,7 +145,7 @@ font-family: 'Noto Sans KR';
     });  
    
 
-  //댓글목록 수정span 을 누르면 수정폼에 해당하는 모달이 뜬다
+  //댓글목록 수정,수정모달창뜨게
 	$(document).on("click","span.ansup",function(){
 		
 		 var num=$("#num").val();
@@ -186,9 +188,37 @@ font-family: 'Noto Sans KR';
 		});
 	});
 	
+	//문의글 삭제
+	 $("#qdel").click(function(){
+	    	
+	    	
+	    	var num=$("#num").val();
+	    
+	    
+	    	$.ajax({
+	    		type:"post",
+	    		url:"qna/qnadelete.jsp",
+	    		dataType:"html",
+	    		data:{"num":num},
+	    		success:function(){
+	    			
+	    		
+	    			
+	    			//alert("success");
+	    			
+	    			 location.href="index.jsp?main=qna/qnalist.jsp";
+	    			
+	    			
+	    		}
+	    		});
+	    		});
     
+	
+	
+	
     });
- 
+
+    //댓글리스트
    function answerlist(){
 	   
 	   var num=$("#num").val();
@@ -201,22 +231,30 @@ font-family: 'Noto Sans KR';
 		   data:{"num":num},
 		   success:function(res){
 	
-			   
+			  
 			   var s="";
 			   $.each(res,function(i,ele){
 				  
 				   s+="<b>관리자&nbsp;답변&nbsp;:&nbsp;&nbsp;"+ele.answer+"</b>";
+				  
+				   <%
+				   String n=(String)session.getAttribute("myid");
+				   if((n.equals("admin"))){
+				   %>
+					
 				
 				   s+="<span class='ansup glyphicon glyphicon-pencil' ></span>";
 				   s+="<span class='ansdel 	glyphicon glyphicon-remove'></span>";
-				
+				  
+				   <%}
+				   %>
 				   s+="<span class='aday'>"+ele.writeday+"</span>";
 				   $("#answerlist").html(s);
-				
+			 
+			
 				   
 			   });
-			 
-			   
+		
 		   }
 		   
 		   
@@ -225,7 +263,7 @@ font-family: 'Noto Sans KR';
 	   
    }
   
-      			
+      		
     
     		
   
@@ -235,13 +273,14 @@ font-family: 'Noto Sans KR';
 </head>
 
 <%
+
 String num=request.getParameter("num");
 String currentPage = request.getParameter("currentPage");
 
 String loginok=(String)session.getAttribute("loginok");
 
 String myid=(String)session.getAttribute("myid");
-String pass=(String)session.getAttribute("pass");
+
 
 
 memberDao mdao = new memberDao();
@@ -263,7 +302,7 @@ qnaDto dto=dao.getData(num);
 <div style="width: 870px;">
 	
 	<input type="hidden" id="num" value="<%=num%>">
-	<input type="hidden" id="pass" value="<%=pass%>">
+	
 	<h5 class="alert alert-info" style="margin:70px 400px; width: 870px;">1:1 문의게시글</h5>
 		<table class="table table-bordered" style="margin:20px 400px;">
 
@@ -300,7 +339,6 @@ qnaDto dto=dao.getData(num);
 
 <div id="answerlist" style="margin:5px 550px;">
 
-
 </div>
 
 
@@ -310,6 +348,7 @@ qnaDto dto=dao.getData(num);
 if(name.equals("admin")){%>
  <input type="hidden" id="myid"  value="<%=myid %>">
 	  <input type="hidden" id="num" value="<%=dto.getNum()%>">
+
 	  <form id="answerfrm" style="margin: 20px 500px;">
 
 	   
@@ -325,18 +364,20 @@ if(name.equals("admin")){%>
 	</div>
 <%}
 %>
+
 <div style="margin:40px 730px;">
 
 
   	  <button type="button" class="btn btn-info" style="width:100px; height: 50px;  font-size: 17px;"
 	  	  onclick="location.href='index.jsp?main=qna/qnalist.jsp'">목록</button>
 	  	
-	  	
-	<button type="submit" class="btn btn-default" style="width:100px; height: 50px; background-color:gray; 
+
+	<button type="button" class="btn btn-default" style="width:100px; height: 50px; background-color:gray; 
 	color:white; font-size: 17px;"
-	  	  onclick="location.href='index.jsp?main=qna/qnadelete.jsp?num=<%=num%>'">삭제</button>
+	  	 id="qdel">삭제</button>
 
 </div>
+
 
 	<!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog" >

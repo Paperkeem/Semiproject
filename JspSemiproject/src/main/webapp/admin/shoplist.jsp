@@ -1,3 +1,6 @@
+<%@page import="data.Dao.qnaDao"%>
+<%@page import="data.Dto.qnaDto"%>
+<%@page import="data.Dao.memberDao"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
 <%@page import="data.Dao.shopDao"%>
@@ -26,7 +29,7 @@ font-family: 'Noto Sans KR';
 $(function(){
 	$(".alldelcheck").click(function(){
 		var chk=$(this).is(":checked");
-		//alert(chk);
+		
 		
 		$(".alldel").prop("checked",chk);
 		
@@ -67,9 +70,14 @@ $(function(){
 request.setCharacterEncoding("utf-8");
 shopDao dao=new shopDao();
 
+qnaDao qdao=new qnaDao();
 
+
+memberDao mdao=new memberDao();
+String num=request.getParameter("num");
 
 String loginok=(String)session.getAttribute("loginok");
+String myid=(String)session.getAttribute("myid");
 
 int totalCount;
 int totalPage; //총페이지수
@@ -118,51 +126,68 @@ List<shopDto>list=dao.getList(start, perPage);
 <b style="margin-left: 10px; font-size: 20px;">관리자페이지</b>
 </div>
 <br>
+ <%
+        String al=(String)session.getAttribute("myid");
+if(loginok!=null && al.equals("admin")){ //로그인중에만 게시글등록 삭제 보이게
+	%>
+	
 <h5 class="alert alert-info">총 <%=totalCount %>개의 상품이 있습니다</h5>
+             <%}
+
+%>
    <table class="table table-striped" style="width: 1300px;">
      <caption><b>상품입고리스트</b></caption>
        <tr>
        <td colspan="5">
-         <input type="checkbox" class="alldelcheck">&nbsp;&nbsp;전체선택
-         <span style="float: right;">
+          <span style="float: right;">
+ <%
+        String m=(String)session.getAttribute("myid");
+if(loginok!=null && m.equals("admin")){ //로그인중에만 게시글등록 삭제 보이게
+	%>
+	
          <button type="button" class="btn btn-default" style="background-color: lightpink;"
          id="btndel"><span class="	glyphicon glyphicon-trash"></span></button>
          <button type="button" class="btn btn-default"  style="background-color: lightblue;" onclick="location.href='index.jsp?main=admin/addform.jsp'"><span class="glyphicon glyphicon-pencil"></span></button>
-         
+            <%}
+
+%>
     </span>
+ 
        </td>
      
      </tr>
    
      <tr>
-       <th width="50">번호</th>
-       <th width="100">카테고리</th>
-       <th width="100">상품타입</th>
-       <th width="70">상품명</th>
+       <th width="50">No.</th>
+       <th width="70">카테고리</th>
+       <th width="50">상품타입</th>
+       <th width="200">상품명</th>
        <th width="70">입고일</th>
      
      
      </tr>
-     <%
-     String name=(String)session.getAttribute("myid");
-     if(name.equals("admin"))
-    	 
-      
-     {
-     %>
+        <%
+       
+if(loginok==null)
+{ 
+	%>
      
     	<tr>
     	
-    	  <td colspan="5" align="center">
+    	  <td colspan="5" align="center" style="color: gray;">
     	    <h5><b>관리자 페이지 입니다</b></h5>
     	  </td>
     	</tr> 
-    	
-     <%}else{
+
+    
+     <%}else {
     	
     	 for(shopDto dto:list)
     	 {
     		 %>
+    		 	<%
+	String name=(String)session.getAttribute("myid");
+if(name.equals("admin")){%>
     		<tr >
     		
     		  <td ><input type="checkbox" class="alldel"
@@ -173,17 +198,20 @@ List<shopDto>list=dao.getList(start, perPage);
     		  <td><%=dto.getIpgoday()%></td>
     		  
     		</tr> 
-    	 <%}
     
-    	 
+    	    	   
+    	       <%}
+    	 }
      }
-     
-    
-     %>
-   
+%>
+
+  
    </table>
+   
    </div>
-<div style="width: 100px; text-align:center;" class="container">
+
+   
+<div style="width: 310px; text-align:center;" class="container">
   <ul class="pagination">
     
     <%

@@ -26,7 +26,7 @@ memberDao mdao=new memberDao();
 
 
 String num=request.getParameter("num");
-String pass=request.getParameter("pass");
+
 %>
 <body>
 
@@ -39,7 +39,7 @@ String pass=request.getParameter("pass");
    
   <br>
   <b style="margin: 30px 500px; font-size:20px; ">문의 게시글 등록</b>
-  <h5 class="alert alert-success" style="width: 700px; margin: 50px 500px; font-size: 15px;">문의글을 등록해주세요</h5>
+  <h5 class="alert alert-info" style="width: 700px; margin: 50px 500px; font-size: 15px;">문의글을 등록해주세요</h5>
     <table class="table table-hover" style="margin: 10px 500px; width: 700px;">
 
    
@@ -62,7 +62,7 @@ String pass=request.getParameter("pass");
     
     <tr>
      <td colspan="3" align="center">
-     <button type="submit" class="btn btn-success" style="width:100px; height:50px; color: white; font-size: 17px;">등록</button>
+     <button type="submit" class="btn btn-info" style="width:100px; height:50px; color: white; font-size: 17px;">등록</button>
     <button type="button" class="btn btn-default" style="width:100px; height:50px; background-color:darkgray; color: white; font-size: 17px;"
     onclick="location.href='index.jsp?main=qna/qnalist.jsp'">목록</button>
     

@@ -16,6 +16,7 @@ public class qnaDao {
 	
 	DbConnect db=new DbConnect();
 	
+	//문의글 등록
 	public void insertQna(qnaDto dto)
 	{
 		Connection conn=db.getConnection();
@@ -42,7 +43,7 @@ public class qnaDao {
 
 	}
 	
-	///////////////
+	//문의글리스트
 	public List<qnaDto> getList(int start,int perPage)
 	{
 		List<qnaDto>list=new Vector<>();
@@ -84,7 +85,7 @@ public class qnaDao {
 		
 	}
 	
-	////////////
+	//총개수
 	public int getTotalCount()
 	{
 		int n=0;
@@ -112,7 +113,7 @@ public class qnaDao {
 		return n;
 	}
 
-	////////////////////
+	//
 	public qnaDto getData(String num)
 	{
 		qnaDto dto=new qnaDto();
@@ -147,9 +148,10 @@ public class qnaDao {
 		}
 		return dto;
 	}
-	////////////////////////////////
+	
 
-	//////////////
+	
+	//문의글삭제
 	public void deleteQna(String num)
 	{
 		Connection conn=db.getConnection();
@@ -173,7 +175,7 @@ public class qnaDao {
 	}
 	
 
-
+   //댓글등록
 	public void updateQnaAnswer(String num,String answer)
 	   
 	   {
@@ -198,7 +200,7 @@ public class qnaDao {
 	      
 	   }
 	
-	//answerlist
+	//댓글 리스트
 	public List<qnaDto> getAnswerList(String num)
 	{
 		List<qnaDto> list = new ArrayList<qnaDto>();
@@ -237,7 +239,7 @@ public class qnaDao {
 		return list;
 	}
 	
-	//answer 삭제
+	//댓글 삭제
 	public void deleteAnswer(String num,String answer)
 	{
 		Connection conn=db.getConnection();
@@ -262,54 +264,7 @@ public class qnaDao {
 		}
 		
 	}
-	
-	////게시글수정
-	public void updateQna(qnaDto dto)
-	{
-		Connection conn=db.getConnection();
-		PreparedStatement pstmt=null;
-		String sql="update qna content=? where num=?";
-		
-		try {
-			pstmt=conn.prepareStatement(sql);
-			
-			pstmt.setString(1, dto.getNum());
-			pstmt.setString(2, dto.getContent());
-		
-		  
-			pstmt.execute();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			db.dbClose(pstmt, conn);
-		}
-		
-	}
-	public boolean isPassEqual(String num,String pass)
-	{
-		boolean b=false;
-		Connection conn=db.getConnection();
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		
-		String sql="select * from qna where num=? and pass=?";
-		
-		try {
-			pstmt=conn.prepareStatement(sql);
-			
-			pstmt.setString(1,  num);
-			pstmt.setString(2, pass);
-			rs=pstmt.executeQuery();
-			
-			if(rs.next())
-				b=true;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return b;
-	}
+
+
 
 }

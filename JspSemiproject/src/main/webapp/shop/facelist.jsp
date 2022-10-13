@@ -79,7 +79,7 @@ object-fit : contain;
 }
 
 .prd{
-margin-left:11.5%;
+margin-left:7%;
 margin-top: 90px;
 }
 
@@ -95,7 +95,7 @@ border-radius: 5px;
 .sidebar{
 width:850px;
 margin-top: 30px;
-margin-left: 160px;
+margin-left: 90px;
 }
 
 ul{
@@ -385,39 +385,7 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }
-		 %>
-		<div style="width: 200px; margin-left: 28%; padding-top:30%;" class="pcontainer">
-  		<ul class="pagination">
-      <%   
-      if(startPage>1)
-   		 {%>
-    	<li>
-    	  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=startPage-1%>">이전</a>
-    	</li>
-    	<%}
-    	for(int pp=startPage;pp<=endPage;pp++)
-    	{
-    	if(pp==currentPage)
-    	{%>
-    		<li class="active">
-    		  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=pp%>"><%=pp %></a>
-    		</li>
-    	<%}else{%>
-    		<li >
-    		  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=pp%>"><%=pp %></a>
-    		</li>
-    	<%}
-   	 }
-    	if(endPage<totalPage)
-    	{%>
-    	<li>
-    	  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=endPage+1%>">다음</a>
-    	</li>
-    	<%}
-    	%>
-  	</ul>
-	</div>
-		 <% }else{
+		 }else{
 	 	
 		 for(shopDto dto : list)
 			 {
@@ -462,7 +430,7 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }%>
-		 <div style="width: 200px; margin-left: 28%; padding-top:60%;" class="pcontainer">
+		 <div style="width: 200px; margin-left: 29.5%; padding-top:60%;" class="pcontainer">
   		<ul class="pagination">
       	<%   
        if(startPage>1)

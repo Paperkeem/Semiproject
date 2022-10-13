@@ -1,3 +1,6 @@
+
+<%@page import="data.Dao.replyDao"%>
+<%@page import="data.Dao.memberDao"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="data.Dto.shopDto"%>
 <%@page import="java.util.List"%>
@@ -16,25 +19,26 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style type="text/css">
-
 #container{
 width:100%;
 margin-left: 70px;
-
 }
 .location .intag{
+
 float:left;
 color:gray;
-}
-div.inner{
-padding-bottom: 10px;
+
 }
 div.intag *{
 color:gray;
 font-size: 9pt;
 }
+div.inner{
+padding-bottom: 10px;
+}
 
-#menu1,#menu2,#menu3,#menu4{
+#menu1,#menu2{
+
 width:60px;
 background :none;
 border: 0;
@@ -45,11 +49,10 @@ padding-bottom: 2px;
 #content{
 width: 80%;
 
-
 }
-.listheader{
+div.listheader{
 background-image: url('shopsave/f3.jpeg');
-	opacity:0.9; 
+		opacity:0.9; 
 		width:100%;
 		height:150px; 
 		background-position:center center; 
@@ -58,10 +61,9 @@ background-image: url('shopsave/f3.jpeg');
 }
 .addmenu
 {
+position:absolute;
 font-size: 16px;
-color:gray;
 }
-
 .p-box{
 display: inline-block;
 width: 190px;
@@ -75,8 +77,9 @@ height:200px;
 overflow: hidden;
 object-fit : contain;
 }
+
 .prd{
-margin-left:11%;
+margin-left:11.5%;
 margin-top: 90px;
 }
 
@@ -166,6 +169,34 @@ $(function(){
 				}
 			});
 		})	
+		//장바구니 추가 처리
+		$("span.cartin").click(function(){
+			var shopnum = $(this).attr("shopnum");
+			var num = $("#num").val();
+			var cnt = $("#cnt").val();
+			//console.log(shopnum,num,cnt);
+		  $.ajax({
+			type:"post",
+			url:"shop/detailproc.jsp",
+			dataType:"html",
+			data:{"shopnum":shopnum,"num":num,"cnt":cnt},
+			success:function(){
+				var a=confirm('해당 상품을 장바구니에 저장했습니다\n장바구니로 이동하려면 확인을 클릭해주세요');
+				if(a){
+					location.href="index.jsp?main=shop/cart.jsp";
+				}
+			}
+		});  
+		
+		})
+			$("ul.sidelist li a").hover(function(){
+			 $(this).css("color","#4576b0")
+			  $(this).css("font-weight","bold")},
+			 function(){
+	 		$(this).css("color","gray")
+	 		$(this).css("font-weight","normal")
+		 })
+		
 })
 </script>
 </head>
@@ -173,6 +204,16 @@ $(function(){
 shopDao dao = new shopDao();
 String sangpumtype = request.getParameter("sangpumtype");
 String category = request.getParameter("category");
+String loginok = (String)session.getAttribute("loginok");
+String myid = (String)session.getAttribute("myid");
+
+//아이디에 해당하는 멤버 번호 
+memberDao mdao = new memberDao();
+String num = mdao.getNum(myid);
+
+//리뷰수 불러오기
+replyDao rdao = new replyDao();
+
 DecimalFormat df = new DecimalFormat("###,###");
 
 //페이징 
@@ -187,7 +228,7 @@ int perBlock=5; //한 블럭당 보여지는 페이지 갯수
 int currentPage; //현재페이지 
 
 //총갯수
-totalCount =dao.getTotalCount();
+totalCount =dao.getTotalCateCount(category);
 
 //현재 페이지 번호 읽기(null인 경우 1페이지로 설정)
 if(request.getParameter("currentPage")==null)
@@ -210,7 +251,7 @@ if(endPage>totalPage)
 	start = (currentPage-1)*perPage;
 
 //각 페이지에서 필요한 게시글 불러오기
-	List<shopDto> list = dao.getList(start, perPage);
+	List<shopDto> list = dao.getCateList(category, start, perPage);
 
 %>
 <body>
@@ -284,17 +325,18 @@ if(endPage>totalPage)
 	 	
 	 	<div class="sidebar">
 		<ul class="sidelist">
-		<li><a href="">전체보기</a></li>	
-		<li><a href="">베이스/파운데이션</a></li>
-		<li><a href="">블러셔/하이라이터</a></li>
-		<li><a href="">아이섀도우</a></li>
-		<li><a href="">아이라이너/브로우</a></li>
-		<li><a href="">마스카라</a></li>
-		<li><a href="">립메이크업</a></li>
+		<li><a href="index.jsp?main=shop/facelist.jsp?category=facemakeup">전체보기</a></li>	
+		<li><a href="index.jsp?main=shop/facelist.jsp?sangpumtype=base_foundation&category=facemakeup">베이스/파운데이션</a></li>
+		<li><a href="index.jsp?main=shop/facelist.jsp?sangpumtype=blush_highlighter&category=facemakeup">블러셔/하이라이터</a></li>
+		<li><a href="index.jsp?main=shop/facelist.jsp?sangpumtype=eyeshadow&category=facemakeup">아이섀도우</a></li>
+		<li><a href="index.jsp?main=shop/facelist.jsp?sangpumtype=eyeliner_brow&category=facemakeup">아이라이너/브로우</a></li>
+		<li><a href="index.jsp?main=shop/facelist.jsp?sangpumtype=mascara&category=facemakeup">마스카라</a></li>
+		<li><a href="index.jsp?main=shop/facelist.jsp?sangpumtype=lip&category=facemakeup">립메이크업</a></li>
 		</ul>
 		</div>
 	 	
-	 	<div class="prd">
+	 
+	 <div class="prd">
      <%
 	 int i = 1;
 	 if( sangpumtype != null){
@@ -303,10 +345,12 @@ if(endPage>totalPage)
 		 {
 			if(dto.getSangpumtype().equals(sangpumtype)){
 			%>
+			<form id="add">
+     		<input type="hidden" id="num" name="num" value="<%=num%>">
+     		<input type="hidden" id="cnt" name="cnt" value="1">
 			<div class="productlist">
-			
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 			<div class="p-box">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo">
 			</div>
 			<div class="info">
@@ -314,97 +358,147 @@ if(endPage>totalPage)
 				<%=dto.getSangpum()%>
 				</div>
 				<% int price = Integer.parseInt(dto.getPrice()); %>
-				<h4><%=df.format(price)%>원</h4></a>			
+				<h4 style="margin-top:30px;"><%=df.format(price)%>원</h4></a>
 			</div>
 			<div class="addmenu">
-			<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
-				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
-				shopnum="<%=dto.getShopnum()%>"></span>
-				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
-				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;" 
-				onclick="location.href='index.jsp?main=shop/cart.jsp'"></span>
+			<!-- 리뷰 -->
+			<% int recount = rdao.getTotalCount(dto.getShopnum());%>
+			<a href="index.jsp?main=shop/detailview.jsp?shopnum=<%=dto.getShopnum()%>#reply" class="recount" style="color:gray;">
+			<span class="glyphicon glyphicon-comment" style="color:gray;"></span>&nbsp;<%=recount%></a>
+			
+			<!--좋아요 -->
+			<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;margin-left: 10px;"
+			 shopnum="<%=dto.getShopnum()%>"></span>
+			<span class="likechu" style=" margin-right: 10px;"><%=dto.getLikechu() %></span>
+			
+			<!-- 장바구니  -->
+			<% if(loginok!=null){%>
+			<span class="glyphicon glyphicon-shopping-cart cartin" style="cursor: pointer;color:gray;"
+			 shopnum="<%=dto.getShopnum()%>"></span>
+			<%}%>
 			</div>
 			</div>
 			<%
 				if((i+4)%4==0)
 				{%>
-				<br>
+				<br> </form>
 				<%} i++;
-
 			}
 		 }
-		 
-	 }else{
+		 %>
+		<div style="width: 200px; margin-left: 28%; padding-top:30%;" class="pcontainer">
+  		<ul class="pagination">
+      <%   
+      if(startPage>1)
+   		 {%>
+    	<li>
+    	  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=startPage-1%>">이전</a>
+    	</li>
+    	<%}
+    	for(int pp=startPage;pp<=endPage;pp++)
+    	{
+    	if(pp==currentPage)
+    	{%>
+    		<li class="active">
+    		  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=pp%>"><%=pp %></a>
+    		</li>
+    	<%}else{%>
+    		<li >
+    		  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=pp%>"><%=pp %></a>
+    		</li>
+    	<%}
+   	 }
+    	if(endPage<totalPage)
+    	{%>
+    	<li>
+    	  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=endPage+1%>">다음</a>
+    	</li>
+    	<%}
+    	%>
+  	</ul>
+	</div>
+		 <% }else{
 	 	
 		 for(shopDto dto : list)
 			 {
 			if(dto.getCategory().equals(category)){%>
-			<div class="productlist" style="float: left; margin-right: 30px;">
-			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
+			<form id="add">
+     		<input type="hidden" id="num" name="num" value="<%=num%>">
+     		<input type="hidden" id="cnt" name="cnt" value="1">
+			<div class="productlist">
 			<div class="p-box">
+			<a shopnum=<%=dto.getShopnum()%> style="cursor: pointer; color:black;" class="detail">
 			<img alt="" src="shopsave/<%=dto.getPhoto()%>" class="img-thumbnail photo">
 			</div>
 			<div class="info">
 				<div class="title" style="width:200px; font-size: 1.1em;">
 				<%=dto.getSangpum()%>
 				</div>
-					<% int price = Integer.parseInt(dto.getPrice()); %>
-				<h4><%=df.format(price)%>원</h4></a>			
+				<% int price = Integer.parseInt(dto.getPrice()); %>
+				<h4 style="margin-top:30px;"><%=df.format(price)%>원</h4></a>
 			</div>
 			<div class="addmenu">
-				<span class="glyphicon glyphicon-comment" style="cursor: pointer; color:gray; margin-right: 15px;"></span>
-				<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;" 
-				shopnum="<%=dto.getShopnum()%>"></span>
-				<span class="likechu" style=" margin-right: 15px;"><%=dto.getLikechu() %></span>
-				<span class="glyphicon glyphicon-shopping-cart" style="cursor: pointer;color:gray;" 
-				onclick="location.href='index.jsp?main=shop/cart.jsp'"></span>
+			<!-- 리뷰 -->
+			<% int recount = rdao.getTotalCount(dto.getShopnum());%>
+			<a href="index.jsp?main=shop/detailview.jsp?shopnum=<%=dto.getShopnum()%>#reply" class="recount" style="color:gray;">
+			<span class="glyphicon glyphicon-comment" style="color:gray;"></span>&nbsp;<%=recount%></a>
+			
+			<!--좋아요 -->
+			<span class="glyphicon glyphicon-heart likes" style="cursor: pointer;color:gray;margin-left: 10px;"
+			 shopnum="<%=dto.getShopnum()%>"></span>
+			<span class="likechu" style=" margin-right: 10px;"><%=dto.getLikechu() %></span>
+			
+			<!-- 장바구니  -->
+			<% if(loginok!=null){%>
+			<span class="glyphicon glyphicon-shopping-cart cartin" style="cursor: pointer;color:gray;"
+			 shopnum="<%=dto.getShopnum()%>"></span>
+			<%}%>
 			</div>
 			</div>
-			<%
+						<%
 				if((i+4)%4==0)
 				{%>
-				<br>
+				<br></form> 
 				<%} i++;
 			}
-			 }
-	 }%>
-		     
-	   </div>
-	   </div>
-	   
-  <div style="width: 100px; margin-left:34%;" class="pcontainer">
-  <ul class="pagination">
-    
-    <%
-    if(startPage>1)
-    {%>
+		 }%>
+		 <div style="width: 200px; margin-left: 28%; padding-top:60%;" class="pcontainer">
+  		<ul class="pagination">
+      	<%   
+       if(startPage>1)
+    	{%>
     	<li>
-    	  <a href="index.jsp?main=shop/shoplist.jsp?currentPage=<%=startPage-1%>">이전</a>
+    	  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category%>&currentPage=<%=startPage-1%>">이전</a>
     	</li>
-    <%}
-    for(int pp=startPage;pp<=endPage;pp++)
-    {
+    	<%}
+    	for(int pp=startPage;pp<=endPage;pp++)
+    	{
     	if(pp==currentPage)
     	{%>
     		<li class="active">
-    		  <a href="index.jsp?main=shop/shoplist.jsp?currentPage=<%=pp%>"><%=pp %></a>
+    		  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category%>&currentPage=<%=pp%>"><%=pp %></a>
     		</li>
     	<%}else{%>
     		<li >
-    		  <a href="index.jsp?main=shop/shoplist.jsp?currentPage=<%=pp%>"><%=pp %></a>
+    		  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category%>&currentPage=<%=pp%>"><%=pp %></a>
     		</li>
     	<%}
-    }
-    if(endPage<totalPage)
-    {%>
+   		 }
+    	if(endPage<totalPage)
+    	{%>
     	<li>
-    	  <a href="index.jsp?main=shop/shoplist.jsp?currentPage=<%=endPage+1%>">다음</a>
+    	  <a href="index.jsp?main=shop/facelist.jsp?category=<%=category%>&currentPage=<%=endPage+1%>">다음</a>
     	</li>
-  	<%}
-    %>
+    	<%}
+    	%>
   
-  </ul>
-</div>
+  	</ul>
+	</div>	
+		 <%
+	 }%>
+	   </div>
+	   </div>
+  
 </div>
 </body>
 </html>

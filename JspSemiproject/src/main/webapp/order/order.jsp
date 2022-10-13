@@ -267,19 +267,8 @@ function requestPay() {
 
     }, function (rsp) { // callback
         if (rsp.success) {
-       		location.href='index.jsp?main=order/success.jsp';
-	       	 
-       		/* $.ajax({
-	             url: "{서버의 결제 정보를 받는 endpoint}", // 예: https://www.myservice.com/payments/complete
-	             method: "POST",
-	             headers: { "Content-Type": "application/json" },
-	             data: {
-	                 imp_uid: rsp.imp_uid,
-	                 merchant_uid: rsp.merchant_uid
-	             }
-	         }).done(function (data) {
-	           // 가맹점 서버 결제 API 성공시 로직
-	         }) */
+       		location.href='index.jsp?main=order/success.jsp?orderid='+ rsp.merchant_uid;
+       		 
 	    } else {
 	        var msg = '결제에 실패하였습니다.';
 	            msg += '에러내용 : ' + rsp.error_msg;

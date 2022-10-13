@@ -337,6 +337,49 @@ public class shopDao {
 				db.dbClose(pstmt, conn);
 			}
 		}
+		
+		// 추천 순으로 가져오기
+		public List<shopDto> getLikeChu()
+		{
+			List<shopDto>list =new Vector<>();
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			
+			String sql="select * from shop order by likechu desc";
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+
+				rs=pstmt.executeQuery();
+				
+				while(rs.next())
+				{
+					shopDto dto=new shopDto();
+					
+					dto.setShopnum(rs.getString("shopnum"));
+					dto.setCategory(rs.getString("category"));
+					dto.setSangpumtype(rs.getString("sangpumtype"));
+					dto.setGomin(rs.getString("gomin"));
+					dto.setSangpum(rs.getString("sangpum"));
+					dto.setPhoto(rs.getString("photo"));
+					dto.setPrice(rs.getString("price"));
+					dto.setLikechu(rs.getInt("likechu"));
+					dto.setIpgoday(rs.getString("ipgoday"));
+				
+					
+					list.add(dto);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				db.dbClose(rs, pstmt, conn);
+			}
+
+			return list;
+		}
 	
 		
 }

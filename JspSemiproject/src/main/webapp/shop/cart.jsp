@@ -1,3 +1,5 @@
+<%@page import="data.Dto.memberDto"%>
+<%@page import="data.Dao.memberDao"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.List"%>
@@ -26,6 +28,9 @@ td{vertical-align : bottom;}
 String id=(String)session.getAttribute("myid");
 String loginok=(String)session.getAttribute("loginok");
 
+// 회원 값 찾기
+memberDao mdao = new memberDao();
+String num=mdao.getNum(id);
 
 shopDao dao=new shopDao();
 List<HashMap<String,String>>list=dao.getCartList(id);
@@ -60,9 +65,7 @@ int result=0;
 		%>
 				<tr>
 					<td>
-						<input type="checkbox" name="idx" class="idx" 
-						idx="<%=map.get("idx")%>" shopnum="<%=map.get("shopnum")%>" 
-						cnt="<%=map.get("cnt") %>" price="<%=map.get("price")%>">
+						<input type="checkbox" name="idx" class="idx" idx="<%=map.get("idx")%>">
 					</td>
 					<td>
 						<div shopnum="<%=map.get("shopnum") %>" class="sangpum">
@@ -145,16 +148,8 @@ $("button.del").click(function(){
 // 결제 이동
 $("#btn-order").click(function(){
 	
-	$(".idx:checked").each(function(idx){
-		var shopnum = $(this).attr("shopnum");
-		var cnt = $(this).attr("cnt");
-		var price = $(this).attr("price");
-		// console.log(shopnum,cnt,price);
-	});
-	
-	
 	if(<%=loginok!=null%>){
-		location.href="index.jsp?main=order/orderaction.jsp";
+		location.href="index.jsp?main=order/order.jsp";
 	}else if(<%=loginok==null%>){
 		alert("로그인을 먼저 진행해주세요.");
 	}

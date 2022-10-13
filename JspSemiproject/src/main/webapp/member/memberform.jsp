@@ -15,7 +15,7 @@
   height:400px;
   transform: translate(-50%,-50%);
   padding: 30px, 20px;
-  top:40%;
+  top:30%;
   left:70%;
   border-radius: 15px;
   font-size: 12pt;

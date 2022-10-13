@@ -52,7 +52,6 @@ multi=new MultipartRequest(request,realPath,uploadSize,"utf-8",
    String gomin=multi.getParameter("gomin");
    String sangpum=multi.getParameter("sangpum");
    String price=multi.getParameter("price");
-   //int likechu=Integer.parseInt(multi.getParameter("likechu"));
    String ipgoday=multi.getParameter("ipgoday");
 	
 
@@ -73,7 +72,6 @@ multi=new MultipartRequest(request,realPath,uploadSize,"utf-8",
 	dto.setSangpum(sangpum);
 	dto.setGomin(gomin);
 	dto.setPrice(price);
-	//dto.setLikechu(likechu);
 	dto.setIpgoday(ipgoday);
 	
     dto.setPhoto(photo);

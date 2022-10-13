@@ -178,7 +178,6 @@ public class shopDao {
 			db.dbClose(pstmt, conn);
 		}
 		
-		
 	}
 	
 	public void updateLikechu(String shopnum) {
@@ -339,5 +338,5 @@ public class shopDao {
 			}
 		}
 	
-	
+		
 }

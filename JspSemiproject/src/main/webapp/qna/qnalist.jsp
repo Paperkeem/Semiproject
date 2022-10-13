@@ -152,7 +152,7 @@ if(loginok!=null){ //로그인중에만 게시글등록 삭제 보이게
 	 	
 	 	
 
-	    <td ><a href="index.jsp?main=qna/qnadetail.jsp?num=
+	    <td  ><a href="index.jsp?main=qna/qnadetail.jsp?num=
     	<%=dto.getNum() %>" style="color: #0A6ECD;">
     		<%
 	String name=(String)session.getAttribute("myid");
@@ -188,7 +188,7 @@ if(name.equals(dto.getMyid())||name.equals("admin")){%>
 
 
 
-<div style="width: 180px; text-align:center;" class="container">
+<div style="width:100px; text-align:center;" class="container">
   <ul class="pagination">
     
     <%

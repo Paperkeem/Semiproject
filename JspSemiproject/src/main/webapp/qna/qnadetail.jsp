@@ -158,15 +158,13 @@ font-family: 'Noto Sans KR';
 			dataType:"json",
 			data:{"num":num},
 			success:function(res){
-				
-				
+					
 				$("#aanswer").val(res.answer);
 			}
 		});
 		
 		$("#myModal").modal();
 	});
-	
 
 	//댓글수정
 	$(document).on("click","#btnaupdate",function(){
@@ -345,18 +343,16 @@ qnaDto dto=dao.getData(num);
 	<div>
 	<%
 	String name=(String)session.getAttribute("myid");
-if(name.equals("admin")){%>
- <input type="hidden" id="myid"  value="<%=myid %>">
-	  <input type="hidden" id="num" value="<%=dto.getNum()%>">
+    if(name.equals("admin")){%>
+     <input type="hidden" id="myid"  value="<%=myid %>">
+     <input type="hidden" id="num" value="<%=dto.getNum()%>">
 
 	  <form id="answerfrm" style="margin: 20px 500px;">
-
-	   
-	   <textarea placeholder="Admin 답변을 작성해주세요" class="form-control" style="margin:100px -55px;  border: 1px solid gray" id="answer"></textarea>
+	  <textarea placeholder="Admin 답변을 작성해주세요" class="form-control" style="margin:100px -55px;  border: 1px solid gray" id="answer"></textarea>
 	
 	     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-	    <button type="button" class="btn btn-default" id="addanswer">등록</button>
+ 
+	   <button type="button" class="btn btn-default" id="addanswer">등록</button>
 	    
 
 	</form>

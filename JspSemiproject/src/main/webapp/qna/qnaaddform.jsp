@@ -23,8 +23,6 @@ font-family: 'Noto Sans KR';
 String loginok = (String)session.getAttribute("loginok");
 memberDao mdao=new memberDao();
 
-
-
 String num=request.getParameter("num");
 
 %>

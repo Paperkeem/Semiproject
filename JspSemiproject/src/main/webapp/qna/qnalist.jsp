@@ -152,31 +152,23 @@ if(loginok!=null){ //로그인중에만 게시글등록 삭제 보이게
 	 	
 	 	
 
-	    <td  ><a href="index.jsp?main=qna/qnadetail.jsp?num=
+	    <td><a href="index.jsp?main=qna/qnadetail.jsp?num=
     	<%=dto.getNum() %>" style="color: #0A6ECD;">
     		<%
 	String name=(String)session.getAttribute("myid");
-    		if(loginok!=null)
-if(name.equals(dto.getMyid())||name.equals("admin")){%>
+    if(loginok!=null)
+    if(name.equals(dto.getMyid())||name.equals("admin")){%>
     	<%=dto.getContent()%></a></td>
 
-   
-<%}else{%>
+     <%}else{%>
 	
-<a >
-<span class=" lock glyphicon glyphicon-lock">&nbsp;비밀글입니다.</span>
-</a>
-<%}
-%>
+     <a>
+     <span class=" lock glyphicon glyphicon-lock">&nbsp;비밀글입니다.</span>
+      </a>
+      <%}
+      %>
 
-
-   
-  
     	<td><%=sdf.format(dto.getWriteday())%></td>
-    
-    	
-    	
-    	
     	</tr>
     	
     <%}

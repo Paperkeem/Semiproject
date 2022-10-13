@@ -5,10 +5,7 @@
 <%
 
 String nums=request.getParameter("nums");
-
-
 String [] num=nums.split(",");
-
 
 shopDao dao=new shopDao();
 for(String n:num)

@@ -453,5 +453,156 @@ public class shopDao {
 					
 					return n;
 				}
+				//상품타입 리스트 불러오기
+				public List<shopDto> getTypeList(String sangpumtype, int start, int perPage)
+				{
+					List<shopDto>list =new Vector<>();
+					
+					Connection conn=db.getConnection();
+					PreparedStatement pstmt=null;
+					ResultSet rs=null;
+					
+					String sql="select * from shop where sangpumtype=? order by shopnum desc limit ?,?";
+					
+					try {
+						pstmt=conn.prepareStatement(sql);
+				
+						pstmt.setString(1, sangpumtype);
+						pstmt.setInt(2, start);
+						pstmt.setInt(3, perPage);
+						rs=pstmt.executeQuery();
+						
+						while(rs.next())
+						{
+							shopDto dto=new shopDto();
+							
+							dto.setShopnum(rs.getString("shopnum"));
+							dto.setCategory(rs.getString("category"));
+							dto.setSangpumtype(rs.getString("sangpumtype"));
+							dto.setGomin(rs.getString("gomin"));
+							dto.setSangpum(rs.getString("sangpum"));
+							dto.setPhoto(rs.getString("photo"));
+							dto.setPrice(rs.getString("price"));
+							dto.setLikechu(rs.getInt("likechu"));
+							dto.setIpgoday(rs.getString("ipgoday"));
+						
+							
+							list.add(dto);
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}finally {
+						db.dbClose(rs, pstmt, conn);
+					}
+					
+					
+					
+					return list;
+				}
+
+				//상품타입별 상품갯수 구하기
+				public int getTotalTypeCount(String sangpumtype)
+				{
+					int n=0;
+					
+					Connection conn=db.getConnection();
+					PreparedStatement pstmt=null;
+					ResultSet rs=null;
+					
+					String sql="select count(*) from shop where sangpumtype=?";
+					
+					try {
+						pstmt=conn.prepareStatement(sql);
+						pstmt.setString(1, sangpumtype);
+						rs=pstmt.executeQuery();
+						if(rs.next())
+							n=rs.getInt(1);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}finally {
+						db.dbClose(rs, pstmt, conn);
+					}
+					
+					
+					return n;
+				}
+				
+				//고민별 리스트 
+				public List<shopDto> getGoList(String gomin, int start, int perPage)
+				{
+					List<shopDto>list =new Vector<>();
+					
+					Connection conn=db.getConnection();
+					PreparedStatement pstmt=null;
+					ResultSet rs=null;
+					
+					String sql="select * from shop where gomin=? order by shopnum desc limit ?,?";
+					
+					try {
+						pstmt=conn.prepareStatement(sql);
+						pstmt.setString(1, gomin);
+						pstmt.setInt(2, start);
+						pstmt.setInt(3, perPage);
+						rs=pstmt.executeQuery();
+						
+						while(rs.next())
+						{
+							shopDto dto=new shopDto();
+							
+							dto.setShopnum(rs.getString("shopnum"));
+							dto.setCategory(rs.getString("category"));
+							dto.setSangpumtype(rs.getString("sangpumtype"));
+							dto.setGomin(rs.getString("gomin"));
+							dto.setSangpum(rs.getString("sangpum"));
+							dto.setPhoto(rs.getString("photo"));
+							dto.setPrice(rs.getString("price"));
+							dto.setLikechu(rs.getInt("likechu"));
+							dto.setIpgoday(rs.getString("ipgoday"));
+						
+							
+							list.add(dto);
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}finally {
+						db.dbClose(rs, pstmt, conn);
+					}
+					
+					
+					
+					return list;
+				
+}
+				
+				//고민별 상품갯수 구하기
+				public int getTotalGominCount(String gomin)
+				{
+					int n=0;
+					
+					Connection conn=db.getConnection();
+					PreparedStatement pstmt=null;
+					ResultSet rs=null;
+					
+					String sql="select count(*) from shop where gomin=?";
+					
+					try {
+						pstmt=conn.prepareStatement(sql);
+						pstmt.setString(1, gomin);
+						rs=pstmt.executeQuery();
+						if(rs.next())
+							n=rs.getInt(1);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}finally {
+						db.dbClose(rs, pstmt, conn);
+					}
+					
+					
+					return n;
+				}
 
 }

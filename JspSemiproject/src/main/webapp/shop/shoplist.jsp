@@ -220,16 +220,21 @@ DecimalFormat df = new DecimalFormat("###,###");
 //페이징 
 //페이징에 필요한 변수
 int totalCount;
+int totalTypeCount;
 int totalPage; //총페이지 수 
+int totalTypePage;
 int startPage; //각 블럭의 시작페이지 
 int endPage; //각 블럭의 끝 페이지
+int endtPage; //각 블럭의 끝 페이지
 int start; //각 페이지의 시작번호 
 int perPage=12; //한 페이지에 보여질 글의 갯수 
 int perBlock=5; //한 블럭당 보여지는 페이지 갯수 
 int currentPage; //현재페이지 
 
+
 //총갯수
 totalCount =dao.getTotalCateCount(category);
+totalTypeCount = dao.getTotalTypeCount(sangpumtype);
 
 //현재 페이지 번호 읽기(null인 경우 1페이지로 설정)
 if(request.getParameter("currentPage")==null)
@@ -239,21 +244,26 @@ else
 
 //총페이지갯수 구하기
 totalPage = totalCount/perPage+(totalCount%perPage==0?0:1);
+totalTypePage = totalTypeCount/perPage+(totalTypeCount%perPage==0?0:1);
 
 //각 블럭의 시작페이지 (현재페이지 3/ 시작1/끝 5)
 startPage =(currentPage-1)/perBlock*perBlock+1;
 endPage = startPage+perBlock-1;
-
+endtPage = startPage+perBlock-1;
 //총 페이지 갯수가 8..  2번째 블럭은 startpage6,endpage10.. endpage 8로 수정
 if(endPage>totalPage)
 	endPage=totalPage;
+
+if(endtPage>totalTypePage)
+	endtPage=totalTypePage;
+
 
 //각 페이지에서 불러올 시작번호. 현재페이지가 1일경우 start, 2일경우 6
 	start = (currentPage-1)*perPage;
 
 //각 페이지에서 필요한 게시글 불러오기
 	List<shopDto> list = dao.getCateList(category, start, perPage);
-
+	List<shopDto> Typelist = dao.getTypeList(sangpumtype, start, perPage);
 
 %>
 <body>
@@ -342,7 +352,7 @@ if(endPage>totalPage)
 	 int i = 1;
 	 if( sangpumtype != null){
 		 
-		 for(shopDto dto : list)
+		 for(shopDto dto : Typelist)
 		 {
 			if(dto.getSangpumtype().equals(sangpumtype)){
 			%>
@@ -386,6 +396,40 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }
+		 %>
+		 <div style="width: 200px; margin-left: 27.5%; padding-top:60%;" class="pcontainer">
+  		<ul class="pagination">
+      	<%   
+       if(startPage>1)
+    	{%>
+    	<li>
+    	  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category%>&sangpumtype=<%=sangpumtype %>&currentPage=<%=startPage-1%>">이전</a>
+    	</li>
+    	<%}
+    	for(int pp=startPage;pp<=endtPage;pp++)
+    	{
+    	if(pp==currentPage)
+    	{%>
+    		<li class="active">
+    		  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category%>&sangpumtype=<%=sangpumtype %>&&currentPage=<%=pp%>"><%=pp %></a>
+    		</li>
+    	<%}else{%>
+    		<li >
+    		  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category%>&sangpumtype=<%=sangpumtype %>&&currentPage=<%=pp%>"><%=pp %></a>
+    		</li>
+    	<%}
+   		 }
+    	if(endtPage<totalTypePage)
+    	{%>
+    	<li>
+    	  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category%>&sangpumtype=<%=sangpumtype %>&&currentPage=<%=endtPage+1%>">다음</a>
+    	</li>
+    	<%}
+    	%>
+  
+  	</ul>
+	</div>	
+		 <%
 		}else{
 	 	
 		 for(shopDto dto : list)

@@ -200,9 +200,12 @@ DecimalFormat df = new DecimalFormat("###,###");
 //페이징 
 //페이징에 필요한 변수
 int totalCount;
+int totalGominCount;
 int totalPage; //총페이지 수 
+int totalGominPage; //총페이지 수 
 int startPage; //각 블럭의 시작페이지 
 int endPage; //각 블럭의 끝 페이지
+int endGoPage;
 int start; //각 페이지의 시작번호 
 int perPage= 12; //한 페이지에 보여질 글의 갯수 
 int perBlock=5; //한 블럭당 보여지는 페이지 갯수 
@@ -210,7 +213,7 @@ int currentPage; //현재페이지
 
 //총갯수
 totalCount =dao.getTotalCount();
-
+totalGominCount = dao.getTotalGominCount(gomin);
 
 //현재 페이지 번호 읽기(null인 경우 1페이지로 설정)
 if(request.getParameter("currentPage")==null)
@@ -220,20 +223,25 @@ else
 
 //총페이지갯수 구하기
 totalPage = totalCount/perPage+(totalCount%perPage==0?0:1);
+totalGominPage = totalGominCount/perPage+(totalGominCount%perPage==0?0:1);
 
 //각 블럭의 시작페이지 (현재페이지 3/ 시작1/끝 5)
 startPage =(currentPage-1)/perBlock*perBlock+1;
 endPage = startPage+perBlock-1;
-
+endGoPage = startPage+perBlock-1;
 //총 페이지 갯수가 8..  2번째 블럭은 startpage6,endpage10.. endpage 8로 수정
 if(endPage>totalPage)
 	endPage=totalPage;
+if(endGoPage>totalGominPage)
+	endGoPage=totalGominPage;
 
 //각 페이지에서 불러올 시작번호. 현재페이지가 1일경우 start, 2일경우 6
 	start = (currentPage-1)*perPage;
 
 //각 페이지에서 필요한 게시글 불러오기
 	List<shopDto> list = dao.getList(start, perPage);
+	List<shopDto> Golist = dao.getGoList(gomin, start, perPage);
+			
 %>
 
 <body>
@@ -302,7 +310,7 @@ if(endPage>totalPage)
 	
 	  if( gomin != null ){
 		 
-		 for(shopDto dto : list)
+		 for(shopDto dto : Golist)
 		 {
 			if(dto.getGomin().equals(gomin)){
 			%>
@@ -348,11 +356,43 @@ if(endPage>totalPage)
 				<br> </form>
 				<%} i++;
 			}
-		 }
-		
-		 }
+		 }%>
+		<div style="width: 200px; margin-left: 27.5%; padding-top:30%;" class="pcontainer">
+	  		<ul class="pagination">
+	      	<%   
+	       if(startPage>1)
+	    	{%>
+	    	<li>
+	    	  <a href="index.jsp?main=shop/listgomin.jsp?gomin=<%=gomin %>&currentPage=<%=startPage-1%>">이전</a>
+	    	</li>
+	    	<%}
+	    	for(int pp=startPage;pp<=endGoPage;pp++)
+	    	{
+	    	if(pp==currentPage)
+	    	{%>
+	    		<li class="active">
+	    		  <a href="index.jsp?main=shop/listgomin.jsp?gomin=<%=gomin %>&currentPage=<%=pp%>"><%=pp %></a>
+	    		</li>
+	    	<%}else{%>
+	    		<li >
+	    		  <a href="index.jsp?main=shop/listgomin.jsp?gomin=<%=gomin %>&currentPage=<%=pp%>"><%=pp %></a>
+	    		</li>
+	    	<%}
+	   		 }
+	    	if(endGoPage<totalGominPage)
+	    	{%>
+	    	<li>
+	    	  <a href="index.jsp?main=shop/listgomin.jsp?gomin=<%=gomin %>&currentPage=<%=endGoPage+1%>">다음</a>
+	    	</li>
+	    	<%}
+	    	%>
 	  
-	  else{
+	  	</ul>
+		</div>	
+		 
+		 
+			 <%
+	  } else{
 	 
 		 for(shopDto dto : list)
 			 {

@@ -19,6 +19,14 @@ String root=request.getContextPath();
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
 <script src="<%=root %>/menu/menuscript.js"></script>
 </head>
+<%
+
+
+//세션로그인상태
+String loginok=(String)session.getAttribute("loginok");
+//세션에 저장된 아이디
+String myid=(String)session.getAttribute("myid");
+%>
 <body>
 
 <!-- 메뉴바  -->
@@ -172,10 +180,15 @@ String root=request.getContextPath();
             <li>
               <a href = "index.jsp?main=qna/qnalist.jsp"><h5>Q&A</h5></a>
             </li>
-            
+            	
             <li>
+            <%
+					if(loginok!=null && myid.equals("admin")){%>
               <a href = "index.jsp?main=admin/shoplist.jsp"><h5>admin</h5></a>
             </li>
+            <%}
+					
+					%>
           </ul>
         </div>
       </nav>

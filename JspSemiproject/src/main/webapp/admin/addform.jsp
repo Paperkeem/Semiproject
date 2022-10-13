@@ -94,7 +94,8 @@ font-family: 'Noto Sans KR';
           <tr>
             <td style="width: 150px;"><b>카테고리</b></td>
             <td>
-              <select style="width: 500px;" name="category" id="category" class="form-control" required="required">
+              <select style="width: 500px;" name="category" id="category" class="form-control"
+               required="required">
                 <option value="skincare_cleansing">skincare_cleansing</option>
                 <option value="facemakeup">facemakeup</option>
                 <option value="body_haircare">body_haircare</option>
@@ -121,10 +122,11 @@ font-family: 'Noto Sans KR';
          
          
       
-       <tr>
+            <tr>
             <td style="width: 150px;"><b>피부고민</b></td>
             <td>
-             <select style="width: 500px;" name="gomin" class="form-control" required="required">
+             <select style="width: 500px;" name="gomin" 
+             class="form-control" required="required">
                 <option value="1">모공</option>
                 <option value="2">피부결</option>
                 <option value="3">주름</option>
@@ -135,9 +137,8 @@ font-family: 'Noto Sans KR';
                 <option value="8">피지과다</option>
                 <option value="9">기타</option>
               </select>
-            </td>
-         
-         </tr>
+            </td>         
+             </tr>
          
          
            <tr>

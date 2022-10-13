@@ -14,63 +14,60 @@ public class memberDao {
 
 DbConnect db=new DbConnect();
 	
-	//아이디체크
-	public int isIdcheck(String id)
-	{
-		int isid=0;
-		
-		Connection conn=db.getConnection();
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		
-		String sql="select count(*) from member where id=?";
-		
-		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			rs=pstmt.executeQuery();
-			
-			if(rs.next())
-			{
-				if(rs.getInt(1)==1)
-					isid=1;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			db.dbClose(rs, pstmt, conn);
-		}
-		
-		return isid;
-	}
+//아이디체크
+public int isIdcheck(String id)
+{
+	int isid=0;
 	
-	//아이디에 대한 이름반환
-	public String getName(String id)
-	{
-		String name="";
-		Connection conn=db.getConnection();
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+	Connection conn=db.getConnection();
+	PreparedStatement pstmt=null;
+	ResultSet rs=null;
+	
+	String sql="select count(*) from member where id=?";
+	
+	try {
+		pstmt=conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		rs=pstmt.executeQuery();
 		
-		String sql="select * from member where id=?";
-		
-		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			rs=pstmt.executeQuery();
-			
-			if(rs.next())
-				name=rs.getString("name");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			db.dbClose(rs, pstmt, conn);
+		if(rs.next())
+		{
+			isid=rs.getInt(1);
 		}
-		
-		return name;
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}finally {
+		db.dbClose(rs, pstmt, conn);
 	}
+	return isid;
+}
+	
+//아이디에 대한 이름반환
+public String getName(String id)
+{
+	String name="";
+	Connection conn=db.getConnection();
+	PreparedStatement pstmt=null;
+	ResultSet rs=null;
+	
+	String sql="select * from member where id=?";
+	
+	try {
+		pstmt=conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		rs=pstmt.executeQuery();
+		
+		if(rs.next())
+			name=rs.getString("name");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}finally {
+		db.dbClose(rs, pstmt, conn);
+	}
+	return name;
+}
 	
 	//insert
 	public void insertMember(memberDto dto)
@@ -187,12 +184,68 @@ DbConnect db=new DbConnect();
 			e.printStackTrace();
 		}finally {
 			db.dbClose(rs, pstmt, conn);
-		}
-	
+		}	
 		return b;
-
 	}
 	
+	//아이디 찾기
+	public String getid(String name, String hp) {
+		String id="";
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select from member where name=? and hp=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, hp);
+			
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				id=rs.getString("id");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbClose(rs, pstmt, conn);
+		}
+		return id;
+	}
+	
+	//비밀번호 찾기
+	public String getpass(String name, String id, String hp) {
+		String pass="";
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select from member where name=?, id=? and hp=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, id);
+			pstmt.setString(3, hp);
+			
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				pass=rs.getString("pass");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbClose(rs, pstmt, conn);
+		}
+		return pass;
+	}
+
+
 
 	// num 값에 따른 dto 반환
 	public memberDto getOneData(String num) {

@@ -18,6 +18,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style type="text/css">
+
 #container{
 width:100%;
 margin-left: 70px;
@@ -78,7 +79,7 @@ object-fit : contain;
 }
 
 .prd{
-margin-left:11.5%;
+margin-left:7%;
 margin-top: 90px;
 }
 
@@ -92,9 +93,9 @@ border-radius: 5px;
 }
 
 .sidebar{
-width:850px;
+width:810px;
 margin-top: 30px;
-margin-left: 15px;
+
 }
 
 ul{
@@ -385,39 +386,7 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }
-		 %>
-		<div style="width: 200px; margin-left: 28%; padding-top:30%;" class="pcontainer">
-  		<ul class="pagination">
-      <%   
-      if(startPage>1)
-   		 {%>
-    	<li>
-    	  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=startPage-1%>">이전</a>
-    	</li>
-    	<%}
-    	for(int pp=startPage;pp<=endPage;pp++)
-    	{
-    	if(pp==currentPage)
-    	{%>
-    		<li class="active">
-    		  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=pp%>"><%=pp %></a>
-    		</li>
-    	<%}else{%>
-    		<li >
-    		  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=pp%>"><%=pp %></a>
-    		</li>
-    	<%}
-   	 }
-    	if(endPage<totalPage)
-    	{%>
-    	<li>
-    	  <a href="index.jsp?main=shop/shoplist.jsp?category=<%=category %>&sangpumtype=<%=sangpumtype %>&currentPage=<%=endPage+1%>">다음</a>
-    	</li>
-    	<%}
-    	%>
-  	</ul>
-	</div>
-		 <% }else{
+		}else{
 	 	
 		 for(shopDto dto : list)
 			 {
@@ -462,7 +431,7 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }%>
-		 <div style="width: 200px; margin-left: 28%; padding-top:60%;" class="pcontainer">
+		 <div style="width: 200px; margin-left: 30%; padding-top:60%;" class="pcontainer">
   		<ul class="pagination">
       	<%   
        if(startPage>1)

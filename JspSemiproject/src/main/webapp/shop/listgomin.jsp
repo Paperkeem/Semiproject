@@ -79,7 +79,7 @@ object-fit : contain;
 }
 
 .prd{
-margin-left:11.5%;
+margin-left:7%;
 margin-top: 90px;
 }
 
@@ -95,7 +95,7 @@ border-radius: 5px;
 .sidebar{
 width:850px;
 margin-top: 30px;
-margin-left: 70px;
+
 }
 
 ul{
@@ -111,6 +111,7 @@ margin-left: 10px;
 ul.sidelist li a{
 color:gray;
 }
+
 </style>
 <script type="text/javascript">
 $(function(){
@@ -209,6 +210,7 @@ int currentPage; //현재페이지
 
 //총갯수
 totalCount =dao.getTotalCount();
+
 
 //현재 페이지 번호 읽기(null인 경우 1페이지로 설정)
 if(request.getParameter("currentPage")==null)
@@ -347,39 +349,7 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }
-		 %>
-		<div style="width: 200px; margin-left: 31%; padding-top:30%;" class="pcontainer">
-  		<ul class="pagination">
-      <%   
-      if(startPage>1)
-   		 {%>
-    	<li>
-    	  <a href="index.jsp?main=shop/listgomin.jsp?currentPage=<%=startPage-1%>">이전</a>
-    	</li>
-    	<%}
-    	for(int pp=startPage;pp<=endPage;pp++)
-    	{
-    	if(pp==currentPage)
-    	{%>
-    		<li class="active">
-    		  <a href="index.jsp?main=shop/listgomin.jsp?gomin=<%=gomin %>&currentPage=<%=pp%>"><%=pp %></a>
-    		</li>
-    	<%}else{%>
-    		<li >
-    		  <a href="index.jsp?main=shop/listgomin.jsp?gomin=<%=gomin %>&currentPage=<%=pp%>"><%=pp %></a>
-    		</li>
-    	<%}
-   	 }
-    	if(endPage<totalPage)
-    	{%>
-    	<li>
-    	  <a href="index.jsp?main=shop/listgomin.jsp?currentPage=<%=endPage+1%>">다음</a>
-    	</li>
-    	<%}
-    	%>
-  	</ul>
-	</div>
-		 <%
+		
 		 }
 	  
 	  else{
@@ -427,7 +397,7 @@ if(endPage>totalPage)
 				<%} i++;
 			}
 		 }%>
-		 <div style="width: 200px; margin-left: 31%; margin-top:60%;" class="pcontainer">
+		 <div style="width: 200px; margin-left: 33%; margin-top:30%;" class="pcontainer">
   		<ul class="pagination">
       	<%   
        if(startPage>1)

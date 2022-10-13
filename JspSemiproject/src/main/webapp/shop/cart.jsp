@@ -148,7 +148,7 @@ $("button.del").click(function(){
 // 결제 이동
 $("#btn-order").click(function(){
 	
-	if(<%=loginok!=null%>){
+	if(<%=loginok!=null && list.size()!=0 %>){
 		location.href="index.jsp?main=order/order.jsp";
 	}else if(<%=loginok==null%>){
 		alert("로그인을 먼저 진행해주세요.");

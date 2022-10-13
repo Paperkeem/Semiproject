@@ -256,6 +256,35 @@ DbConnect db=new DbConnect();
 			
 			return num;
 		}
+		
+		// name으로 num 값 불러오기
+		
+		public String getNumber(String name)
+		{
+			String num="";
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			
+			String sql="select * from member where name=?";
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setString(1, name);
+				rs=pstmt.executeQuery();
+				
+				if(rs.next())
+					num=rs.getString("num");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				db.dbClose(rs, pstmt, conn);
+			}
+			
+			return num;
+		}
 
 }
 

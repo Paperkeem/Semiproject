@@ -1,3 +1,7 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
+<%@page import="data.Dao.shopDao"%>
 <%@page import="data.Dto.memberDto"%>
 <%@page import="data.Dao.memberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -10,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@100;300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script async type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <style type="text/css">
 body{font-weight: 300;}
 .form-control{
@@ -17,41 +22,83 @@ border-radius: 1px !important;
 border-color: #dcdcdc !important;
 }
 table, tr, td{
- border:none !important;
+border:none !important;
+}
+
+/* 주문 상품 정보 */
+img.photo{
+width: 30px;
+height: 40px;
+border: 1px solid lightgray;
+}
+div.sangpum{cursor: pointer;}
+div.order-info{position: absolute; width: 60%}
+div.order-box{
+position:fixed;
+width: 20%;
+top: 150px;
+left: 70%;
+}
+div.order{
+width:100%;
+border:1px solid gray;
+padding: 10px;
+}
+.order-btn{
+border-radius: 0px;
+background-color: #283C82;
+font-size: 13pt;
+font-weight:500;
+color: white;
+border: none;
+width:100%;
+margin-top: 10px;
+padding: 15px;
 }
 </style>
 </head>
 <body>
 <%
 memberDao mdao=new memberDao();
+
+
+// 주문 배송 정보 회원 값 가져오기
 String myid=(String)session.getAttribute("myid");
 String num=mdao.getNum(myid);
+
 memberDto mdto=mdao.getOneData(num);
+
+// 장바구니 주문 상품 정보 가져오기
+shopDao dao=new shopDao();
+List<HashMap<String,String>>list=dao.getCartList(myid);
+
+DecimalFormat df = new DecimalFormat("###,###");
+int result=0;
 %>
 
-<div style="margin-left: 70px;">
+<div class="order-info" style="margin-left: 70px;">
 	<h3>결제하기</h3><br><br><br>
 	<h4>주문/배송정보</h4>
-	<hr style="width: 65%; border-color: black;">
-	<table class="table" style="width: 60%">
+	<hr style="width: 90%; border-color: black;">
+	<table class="table" style="width: 100%">
 		<tr>
 			<td width="20%"><span style="color: darkred;">*</span>주문자</td>
 			<td>
-				<input name="id" style="width: 130px;" class="form-control" value="<%=mdto.getName() %>">
+				<input name="name" id="name" style="width: 130px;" class="form-control" value="<%=mdto.getName() %>">
 			</td>
 		</tr>
 		
 		<tr>
 			<td width="20%"><span style="color: darkred;">*</span>연락처</td>
 			<td>
-				<input name="id" style="width: 500px;" class="form-control" value="<%=mdto.getHp() %>">
+				<input name="hp" id="hp" style="width: 500px;" class="form-control" value="<%=mdto.getHp() %>">
 			</td>
 		</tr>
 		
 		<tr>
 			<td width="20%"><span style="color: darkred;">*</span>이메일</td>
 			<td>
-				<input name="id" style="width: 500px;" class="form-control">
+				<input name="email" id="email" style="width: 500px;" class="form-control">
 			</td>
 		</tr>
 		
@@ -60,13 +107,13 @@ memberDto mdto=mdao.getOneData(num);
 			<td>
 				<p style="font-size: 10pt;"><span style="color: darkred;">*</span>주소</p>
 				<div class="form-inline">
-					<input type="text" id="sample6_postcode" placeholder="우편번호" name="adress" style="width: 100px; margin-bottom: 5px;" class="form-control">
+					<input type="text" id="sample6_postcode" placeholder="우편번호" name="postcode" style="width: 100px; margin-bottom: 5px;" class="form-control">
 					<button type="button" onclick="sample6_execDaumPostcode()" class="btn" style="border-radius:1px; margin-bottom: 5px; border-color: lightgray;">
 					<span style="font-size: 8pt;">우편번호 검색</span></button>			
 				</div>
-				<input type="text" id="sample6_address" name="adress" style="width: 500px; margin-bottom: 5px;" class="form-control">
-				<input type="text" id="sample6_extraAddress" name="adress" style="width: 500px; margin-bottom: 5px;" class="form-control">
-				<input type="hidden" id="sample6_detailAddress" name="adress" style="width: 500px;" class="form-control">
+				<input type="text" id="sample6_address" name="adress1" style="width: 500px; margin-bottom: 5px;" class="form-control">
+				<input type="text" id="sample6_extraAddress" name="adress2" style="width: 500px; margin-bottom: 5px;" class="form-control">
+				<input type="hidden" id="sample6_detailAddress" style="width: 500px;" class="form-control">
 			</td>
 		</tr>
 		
@@ -82,7 +129,61 @@ memberDto mdto=mdao.getOneData(num);
 			</td>
 		</tr>
 	</table>
-	<hr style="width: 65%; border-color: gray;">
+	<hr style="width: 90%; border-color: gray;">
+	
+	<br><br><br>
+ 	
+ 	<!-- 주문 정보  -->	
+	<h4>주문 상품 정보</h4>
+	<hr style="width: 90%; border-color: black;">
+	<table class="table" style="width: 100%">
+	
+		<%
+		for(int i=0; i<list.size(); i++){
+		HashMap<String, String>map=list.get(i); %>
+		
+				<tr>
+					<td>
+						<div shopnum="<%=map.get("shopnum") %>" class="sangpum">
+							<img src="shopsave/<%=map.get("photo")%>" class="photo">&nbsp;&nbsp;
+							<%=map.get("sangpum") %>&nbsp;&nbsp;
+						</div>
+					</td>
+					<td><%=map.get("cnt") %>개</td>
+					<%
+					int price = Integer.parseInt(map.get("price"));
+					int cnt = Integer.parseInt(map.get("cnt"));
+					result += (price * cnt) ;
+					%>
+					<td><%=df.format(price * cnt) %>원</td>
+				</tr>
+		<%
+		}	
+		int baesong = (result >= 20000) ? 0 : 2500 ; 
+		%>
+		
+	</table>
+	<hr style="width: 90%; border-color: gray;">
+</div>
+
+<!-- 결제 창 -->
+<div class="order-box">
+<h4>결제 예정 금액</h4>
+<div class="order">
+<p>주문금액 <span style="float: right;"><%=df.format(result) %>원</span></p>
+<p>배송비 <span style="float: right;"><%=baesong %>원</span></p>
+<hr style="color: lightgray; width: 96%; margin: auto;">
+<br>
+<p>최종 결제 금액 <span style="float: right;"><b><%=df.format(result+baesong) %>원</b></span></p>
+<input type="checkbox" style="border-radius: 0px;" checked="checked">
+<label style="font-weight: 300; color: gray;">[필수] 구매 조건 및 결제 진행 동의</label>
+<p style="font-size:7pt; color: lightgray;">주문할 상품의 상품명, 상품가격, 배송정보를 확인하였으며, 
+구매 진행에 동의 하시겠습니까? (전자상거래법 제8조 제2항)</p>
+<p style="font-size:7pt; color: gray;">해당 상품 구매 계약자가 미성년자일 경우
+법정대리인이 동의하지 아니하면 미성년자 본인
+또는 법정대리인은 이 계약을 취소할 수 있습니다.</p>
+</div>
+<button class="order-btn" onclick="requestPay()"><%=df.format(result+baesong) %>원 결제하기</button>
 </div>
 
 
@@ -136,5 +237,57 @@ memberDto mdto=mdao.getOneData(num);
         }).open();
     }
 </script>
+
+
+
+<script type="text/javascript">
+
+var name = $("#name").val();
+var email = $("#email").val();
+var hp = $("#hp").val();
+var postcode = $("#sample6_postcode").val();
+var addr = $("#sample6_address").val();
+var amount = <%=result+baesong %>
+
+function requestPay() {
+    // IMP.request_pay(param, callback) 결제창 호출
+	var IMP = window.IMP; // 생략 가능
+	IMP.init("imp32155874"); // 예: imp00000000
+    IMP.request_pay({ // param
+        pg: 'kakaopay',
+        pay_method: "card",
+        merchant_uid: 'merchant_' + new Date().getTime(), // 상점에서 관리하는 주문 번호
+        name: 'SKINLAB',
+        amount: amount,
+        buyer_email: email,
+        buyer_name: name,
+        buyer_tel: hp,
+        buyer_addr: addr,
+        buyer_postcode: postcode
+
+    }, function (rsp) { // callback
+        if (rsp.success) {
+       		location.href='index.jsp?main=order/success.jsp';
+	       	 
+       		/* $.ajax({
+	             url: "{서버의 결제 정보를 받는 endpoint}", // 예: https://www.myservice.com/payments/complete
+	             method: "POST",
+	             headers: { "Content-Type": "application/json" },
+	             data: {
+	                 imp_uid: rsp.imp_uid,
+	                 merchant_uid: rsp.merchant_uid
+	             }
+	         }).done(function (data) {
+	           // 가맹점 서버 결제 API 성공시 로직
+	         }) */
+	    } else {
+	        var msg = '결제에 실패하였습니다.';
+	            msg += '에러내용 : ' + rsp.error_msg;
+	    }
+	    alert(msg);
+    });
+  }
+</script>
+
 </body>
 </html>

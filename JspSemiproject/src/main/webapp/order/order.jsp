@@ -136,7 +136,7 @@ int result=0;
  	<!-- 주문 정보  -->	
 	<h4>주문 상품 정보</h4>
 	<hr style="width: 90%; border-color: black;">
-	<table class="table" style="width: 100%">
+	<table class="table" style="width: 90%">
 	
 		<%
 		for(int i=0; i<list.size(); i++){

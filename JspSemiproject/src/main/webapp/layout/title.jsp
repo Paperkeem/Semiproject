@@ -1,3 +1,6 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
+<%@page import="data.Dao.shopDao"%>
 <%@page import="data.Dao.memberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -18,12 +21,34 @@ a:hover {text-decoration:none !important}
 ul{
 float: right;
 }
+div.cart{
+width: 15px;
+height: 15px;
+border-radius: 50%;
+background-color: #283C82;
+color: white;
+z-index: 10;
+float: right;
+font-weight: bold;
+position: relative;
+top: 10px;
+left: -15px;
+text-align: center;
+line-height: 15px;
+font-size: 0.5em;
+}
 </style>
 <%
 String loginok=(String)session.getAttribute("loginok");
 String myid=(String)session.getAttribute("myid");
 memberDao dao=new memberDao();
 String name=dao.getName(myid);
+
+
+// 카트 수량
+shopDao sdao=new shopDao();
+List<HashMap<String,String>>list=sdao.getCartList(myid);
+int cartsize=list.size();
 %>
 </head>
 <body>
@@ -33,11 +58,12 @@ String name=dao.getName(myid);
 		<a href="index.jsp?main=login/loginform.jsp">로그인</a>&nbsp;&nbsp;&nbsp;		
 		<a href="index.jsp?main=member/memberform.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;	
 		<%}else{%>
-		<span class="glyphicon glyphicon-user"><b style="font-size: 10pt; font-color: gray;"><%=name%>님 반갑습니다.</b></span>&nbsp;	
+		<a style="font-size: 0.9em;" href="index.jsp?main=order/orderform.jsp"><span class="glyphicon glyphicon-user"></span>&nbsp;<%=name%>님 반갑습니다.</a>&nbsp;&nbsp;&nbsp;
 		<a href="index.jsp?main=login/logoutform.jsp">로그아웃</a>&nbsp;&nbsp;&nbsp;			
 		<%}%>
 		<a href="index.jsp?main=member/mypage.jsp">마이페이지</a>&nbsp;&nbsp;&nbsp;
-		<a href="index.jsp?main=shop/cart.jsp">장바구니</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href="index.jsp?main=shop/cart.jsp">장바구니<div class="cart"><%=cartsize%></div></a>&nbsp;&nbsp;&nbsp;&nbsp;
+		
 	</ul>
 </div>
 </body>

@@ -22,7 +22,7 @@
   padding: 30px, 20px;
   background-color:#FFFFFF;
   text-align:center;
-  top:30%;
+  top:40%;
   left:50%;
   transform: translate(-50%,-50%);
   border-radius: 15px;

@@ -16,7 +16,7 @@
   padding: 30px, 20px;
   background-color:#FFFFFF;
   text-align:center;
-  top:20%;
+  top:25%;
   left:50%;
   transform: translate(-50%,-50%);
   border-radius: 15px;
@@ -52,7 +52,7 @@
 	<div style="background-color:white; margin:-12px -0.5% 0px -20px; text-align:center; height:200px; border: 1px solid">
 	<br><br><br><h2>아이디 찾기</h2>
 	<br>아이디는 가입시 입력하신 핸드폰 번호를 통해 찾으실 수 있습니다.</div>
-	<form action="index.jsp?main=login/idfind2.jsp" method="post" class="form-inline">
+	<form action="#" method="post" class="form-inline">
 	
 	<div class="text">
 	<input name="name" type="text" class="name" placeholder="이름">
